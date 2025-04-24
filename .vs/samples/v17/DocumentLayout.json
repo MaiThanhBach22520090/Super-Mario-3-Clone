@@ -1,0 +1,196 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Code\\Repos\\Super-Mario-3-Clone\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Coin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Coin.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Mario.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\MysteryBox.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\MysteryBox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Mario.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\PlayScene.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\PlayScene.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\AssetIDs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\AssetIDs.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Visual Studio\\IDE\\VC\\Tools\\MSVC\\14.42.34433\\include\\vector||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mushroom.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Mushroom.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Sprite.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{30B52332-21EE-43B1-91BF-B2494C04C34F}|05-SceneManager\\05-SceneManager.vcxproj|solutionrelative:05-SceneManager\\Sprite.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Coin.cpp",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.cpp",
+              "RelativeDocumentMoniker": "05-SceneManager\\Coin.cpp",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.cpp",
+              "RelativeToolTip": "05-SceneManager\\Coin.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-24T11:19:42.91Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Coin.h",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.h",
+              "RelativeDocumentMoniker": "05-SceneManager\\Coin.h",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Coin.h",
+              "RelativeToolTip": "05-SceneManager\\Coin.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-24T11:09:01.46Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Mario.h",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.h",
+              "RelativeDocumentMoniker": "05-SceneManager\\Mario.h",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.h",
+              "RelativeToolTip": "05-SceneManager\\Mario.h",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAAAHgAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-24T10:21:20.045Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Mario.cpp",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.cpp",
+              "RelativeDocumentMoniker": "05-SceneManager\\Mario.cpp",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mario.cpp",
+              "RelativeToolTip": "05-SceneManager\\Mario.cpp",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAADoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-24T10:19:51.76Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MysteryBox.cpp",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.cpp",
+              "RelativeDocumentMoniker": "05-SceneManager\\MysteryBox.cpp",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.cpp",
+              "RelativeToolTip": "05-SceneManager\\MysteryBox.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-24T10:12:32.952Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MysteryBox.h",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.h",
+              "RelativeDocumentMoniker": "05-SceneManager\\MysteryBox.h",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\MysteryBox.h",
+              "RelativeToolTip": "05-SceneManager\\MysteryBox.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-24T10:12:12.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "vector",
+              "DocumentMoniker": "D:\\Visual Studio\\IDE\\VC\\Tools\\MSVC\\14.42.34433\\include\\vector",
+              "RelativeDocumentMoniker": "..\\..\\..\\Visual Studio\\IDE\\VC\\Tools\\MSVC\\14.42.34433\\include\\vector",
+              "ToolTip": "D:\\Visual Studio\\IDE\\VC\\Tools\\MSVC\\14.42.34433\\include\\vector",
+              "RelativeToolTip": "..\\..\\..\\Visual Studio\\IDE\\VC\\Tools\\MSVC\\14.42.34433\\include\\vector",
+              "ViewState": "AgIAAFEHAAAAAAAAAAAswF8HAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-04-24T09:41:28.443Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AssetIDs.h",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\AssetIDs.h",
+              "RelativeDocumentMoniker": "05-SceneManager\\AssetIDs.h",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\AssetIDs.h",
+              "RelativeToolTip": "05-SceneManager\\AssetIDs.h",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAABsAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-24T09:20:14.954Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PlayScene.cpp",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\PlayScene.cpp",
+              "RelativeDocumentMoniker": "05-SceneManager\\PlayScene.cpp",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\PlayScene.cpp",
+              "RelativeToolTip": "05-SceneManager\\PlayScene.cpp",
+              "ViewState": "AgIAAMsAAAAAAAAAAAAAAAUBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-24T09:19:31.898Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Mushroom.cpp",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mushroom.cpp",
+              "RelativeDocumentMoniker": "05-SceneManager\\Mushroom.cpp",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Mushroom.cpp",
+              "RelativeToolTip": "05-SceneManager\\Mushroom.cpp",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAADYAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-24T09:18:50.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Sprite.h",
+              "DocumentMoniker": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Sprite.h",
+              "RelativeDocumentMoniker": "05-SceneManager\\Sprite.h",
+              "ToolTip": "D:\\Code\\Repos\\Super-Mario-3-Clone\\05-SceneManager\\Sprite.h",
+              "RelativeToolTip": "05-SceneManager\\Sprite.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-24T08:48:50.566Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

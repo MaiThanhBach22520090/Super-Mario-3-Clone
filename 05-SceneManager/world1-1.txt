@@ -10,6 +10,7 @@ platforms.txt
 tunnels.txt
 bush.txt
 mushroom.txt
+mysteryBox.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -58,10 +59,9 @@ mushroom.txt
 10	160	176	3	10016
 10	672	160	6	10016
 10	1040	160	2	10016
-10	120	120	1	10020
 
 # MUSHROOM
-11	120	120	10020
+12	120	120	10022	10021
 
 # TUNNELS
 8	352	144	4	10001	10002	10003	10004

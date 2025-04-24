@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "Mushroom.h"
+#include "MysteryBox.h"
 
 #include "Collision.h"
 
@@ -56,6 +57,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CMysteryBox*>(e->obj))
+		OnCollisionWithMysteryBox(e);
+
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -114,6 +118,15 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 		else if (level == MARIO_LEVEL_BIG)
 			coin += 100;
+	}
+}
+
+void CMario::OnCollisionWithMysteryBox(LPCOLLISIONEVENT e)
+{
+	CMysteryBox* box = dynamic_cast<CMysteryBox*>(e->obj);
+	if (box != NULL)
+	{
+		box->SetState(MYSTERY_BOX_STATE_HIT);
 	}
 }
 

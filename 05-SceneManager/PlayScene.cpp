@@ -12,6 +12,7 @@
 #include "SolidBlock.h"
 #include "BackgroundObject.h"
 #include "Mushroom.h"
+#include "MysteryBox.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -250,6 +251,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_MYSTERY_BOX:
+	{
+		if (tokens.size() < 5) return;
+		int animation_id_active = atoi(tokens[3].c_str());
+		int animation_id_used = atoi(tokens[4].c_str());
+		obj = new CMysteryBox(x, y, animation_id_active, animation_id_used);
+
+		objects.push_back(obj);
+		return;
+	}
+
 	case OBJECT_TYPE_SMALL_BUSH:
 	{
 		// Input format: object_type x y lenght sprite_id
@@ -298,7 +310,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			objects.push_back(body_right_obj);
 		}
 	}
-
 
 
 

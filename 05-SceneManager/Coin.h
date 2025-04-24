@@ -11,6 +11,11 @@
 #define COIN_BBOX_HEIGHT 16
 
 class CCoin : public CGameObject {
+
+public:
+	int animationId = ID_ANI_COIN;
+	bool isMysteryCoin = false;
+
 public:
 	CCoin(float x, float y) : CGameObject(x, y) {}
 	void Render();

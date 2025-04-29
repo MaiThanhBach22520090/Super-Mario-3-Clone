@@ -126,21 +126,41 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, false); break;
+	case OBJECT_TYPE_KOOPA:	obj = new CKoopa(x, y);	break;
 
 
 	case OBJECT_TYPE_BRICK_ARRAY:
 	{
-		if (tokens.size() < 5) return; // Ensure there are enough tokens for array size and gap
+
+		// Input format: object_type x y arr_size gap sprite_id IsHorizontal
+		if (tokens.size() < 7) return;
 
 		int arr_size = atoi(tokens[3].c_str());
 		int gap = atoi(tokens[4].c_str());
+		int sprite_id = atoi(tokens[5].c_str());
+		int cellWidth = 16;
+		int cellHeight = 16;
+		int IsHorizontal = atoi(tokens[6].c_str());
 
-		for (int i = 0; i < arr_size; i++)
+		if (IsHorizontal == 1)
 		{
-			obj = new CBrick(x + i * (16 + gap), y);
-			obj->SetPosition(x + i * (16 + gap), y);
-			objects.push_back(obj);
+			for (int i = 0; i < arr_size; i++)
+			{
+				CGameObject* obj = new cSolidBlock(x + i * (cellWidth + gap), y, sprite_id, cellWidth, cellHeight);
+				obj->SetPosition(x + i * (cellWidth + gap), y);
+				objects.insert(objects.begin(), obj);
+			}
 		}
+		else
+		{
+			for (int i = 0; i < arr_size; i++)
+			{
+				CGameObject* obj = new cSolidBlock(x, y + i * (cellHeight + gap), sprite_id, cellWidth, cellHeight);
+				obj->SetPosition(x, y + i * (cellHeight + gap));
+				objects.insert(objects.begin(), obj);
+			}
+		}
+
 		return; // Skip the general object setup for brick array
 	}
 
@@ -275,12 +295,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case OBJECT_TYPE_KOOPA:
-	{
-		if (tokens.size() < 4) return;
-		obj = new CKoopa(x, y);
-		break;
-	}
+
 
 
 	case OBJECT_TYPE_SMALL_BUSH:

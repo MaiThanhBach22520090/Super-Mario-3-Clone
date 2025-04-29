@@ -10,6 +10,7 @@
 #include "Mushroom.h"
 #include "MysteryBox.h"
 #include "PiranhaPlant.h"
+#include "Koopa.h"
 
 #include "Collision.h"
 
@@ -62,7 +63,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMysteryBox(e);
 	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 		OnCollisionWithPiranhaPlant(e);
-
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -148,6 +150,49 @@ void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 			else
 			{
 				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+	if (!koopa) return;
+
+	if (e->ny < 0) // Mario stomps Koopa
+	{
+		int state = koopa->GetState();
+
+		if (state == KOOPA_STATE_WALKING)
+		{
+			koopa->SetState(KOOPA_STATE_SHELL);
+		}
+		else if (state == KOOPA_STATE_SHELL)
+		{
+			// Start sliding
+			koopa->OnStompedByMario(x);
+		}
+		else if (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT)
+		{
+			// Stop sliding and go back to shell
+			koopa->SetState(KOOPA_STATE_SHELL);
+		}
+
+		vy = -MARIO_JUMP_DEFLECT_SPEED; // bounce
+	}
+	else // Mario is hit from side
+	{
+		if (untouchable == 0)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
 				SetState(MARIO_STATE_DIE);
 			}
 		}

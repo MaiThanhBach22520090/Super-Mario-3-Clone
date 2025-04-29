@@ -12,6 +12,7 @@ bush.txt
 mushroom.txt
 mysteryBox.txt
 piranhaPlant.txt
+koopa.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -55,6 +56,10 @@ piranhaPlant.txt
 9	976	144	2	10011	10012	10013	10015
 9	960	128	2	10011	10012	10014	10015
 
+# Boundary
+
+6	0	0	20	0	10000	0
+
 #SMALL BUSHES
 
 10	160	176	3	10016
@@ -73,6 +78,9 @@ piranhaPlant.txt
 
 # GOOMBAS
 #2	240	176
+
+# KOOPA
+14	120	120
 
 
 # MARIO

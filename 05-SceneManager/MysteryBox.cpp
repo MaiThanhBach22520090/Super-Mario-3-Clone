@@ -1,19 +1,8 @@
 #include "MysteryBox.h"
 #include "Mushroom.h"
+#include "Coin.h"
 #include "Animations.h"
 #include "PlayScene.h"
-
-CMysteryBox::CMysteryBox(float x, float y, int animationIdActive, int animationIdUsed) : CGameObject(x, y)
-{
-	this->animationIdActive = animationIdActive;
-	this->animationIdUsed = animationIdUsed;
-	this->animationId = animationIdActive;
-	this->startY = y;
-	this->hasSpawned = false;
-	this->bouncing = false;
-
-	SetState(MYSTERY_BOX_STATE_IDLE);
-}
 
 void CMysteryBox::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -57,7 +46,25 @@ void CMysteryBox::SetState(int state)
 
 		// Spawn mushroom slightly above the box
 		LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-		scene->AddObject(new CMushroom(x, y - MYSTERY_BOX_BBOX_HEIGHT, 10020));
+
+		if (spawnObjectId == 10020) // Mushroom
+		{
+			// Spawn a mushroom
+			float x = this->x;
+			float y = this->y - MYSTERY_BOX_BBOX_HEIGHT;
+			// Create a new mushroom object
+			CMushroom* mushroom = new CMushroom(x, y, spawnObjectId);
+			scene->AddObject(mushroom);
+		}
+		else if (spawnObjectId == 11000) // Coin
+		{
+			// Spawn a coin
+			float x = this->x;
+			float y = this->y - MYSTERY_BOX_BBOX_HEIGHT;
+			// Create a new coin object
+			CCoin* coin = new CCoin(x, y , true);
+			scene->AddObject(coin);
+		}
 
 		hasSpawned = true;
 	}

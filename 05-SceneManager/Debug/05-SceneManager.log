@@ -1,1 +1,25 @@
-﻿
+﻿  Mario.cpp
+  PiranhaPlant.cpp
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PiranhaPlant.cpp(12,38): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PiranhaPlant.cpp(21,35): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PiranhaPlant.cpp(54,40): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PiranhaPlant.cpp(85,40): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  PlayScene.cpp
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\AssetIDs.h(12,9): warning C4005: 'ID_TEX_MARIO': macro redefinition
+  (compiling source file 'PlayScene.cpp')
+      D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\AssetIDs.h(7,9):
+      see previous definition of 'ID_TEX_MARIO'
+  
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(86,20): warning C4018: '<': signed/unsigned mismatch
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(309,84): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(309,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(312,98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(312,87): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(319,94): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(319,83): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(322,108): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(322,97): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(457,20): warning C4018: '<': signed/unsigned mismatch
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\PlayScene.cpp(482,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  05-SceneManager.vcxproj -> D:\Code\Repos\Super-Mario-3-Clone\Debug\05-SceneManager.exe

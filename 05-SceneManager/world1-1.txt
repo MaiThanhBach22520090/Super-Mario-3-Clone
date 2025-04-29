@@ -11,6 +11,7 @@ tunnels.txt
 bush.txt
 mushroom.txt
 mysteryBox.txt
+piranhaPlant.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -61,14 +62,17 @@ mysteryBox.txt
 10	1040	160	2	10016
 
 # MUSHROOM
-12	120	120	10022	10021
+12	120	120	10022	10021	10020
+12	136	120	10022	10021	11000
+
+# PIRANHA PLANTS
+13	360	152	1
 
 # TUNNELS
 8	352	144	4	10001	10002	10003	10004
 
-
 # GOOMBAS
-2	240	176
+#2	240	176
 
 
 # MARIO

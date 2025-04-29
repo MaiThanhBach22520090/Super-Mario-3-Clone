@@ -21,3 +21,4 @@ height	240
 20	textures\misc.png
 50	textures\NES - Super Mario Bros 3 - Stage Tiles.png
 60	textures\SNES - Super Mario All-Stars Super Mario Bros 3 - Power Ups.png
+70	textures\NES - Super Mario Bros 3 - Enemies.png

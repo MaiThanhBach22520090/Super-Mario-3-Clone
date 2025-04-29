@@ -1,4 +1,5 @@
 #include "Coin.h"
+#include "PlayScene.h"
 
 void CCoin::Render()
 {
@@ -10,7 +11,28 @@ void CCoin::Render()
 
 void CCoin::Update(DWORD dt)
 {
+	if (!isMysteryCoin) return;
 
+	y += vy * dt;
+
+	if (goingUp)
+	{
+		if (y <= startY - COIN_FLOAT_HEIGHT)
+		{
+			y = startY - COIN_FLOAT_HEIGHT;
+			vy = COIN_FALL_DOWN_SPEED;
+			goingUp = false;
+			spawnTime = GetTickCount64(); // start countdown to delete
+		}
+	}
+	else // falling
+	{
+		DWORD now = GetTickCount64();
+		if (now - spawnTime >= COIN_LIFETIME_AFTER_FALL)
+		{
+			Delete();
+		}
+	}
 }
 
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)

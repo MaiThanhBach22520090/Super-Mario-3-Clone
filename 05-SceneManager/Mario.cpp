@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Mushroom.h"
 #include "MysteryBox.h"
+#include "PiranhaPlant.h"
 
 #include "Collision.h"
 
@@ -59,6 +60,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CMysteryBox*>(e->obj))
 		OnCollisionWithMysteryBox(e);
+	else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+		OnCollisionWithPiranhaPlant(e);
 
 }
 
@@ -127,6 +130,27 @@ void CMario::OnCollisionWithMysteryBox(LPCOLLISIONEVENT e)
 	if (box != NULL)
 	{
 		box->SetState(MYSTERY_BOX_STATE_HIT);
+	}
+}
+
+void CMario::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
+{
+	CPiranhaPlant* plant = dynamic_cast<CPiranhaPlant*>(e->obj);
+	if (plant != NULL)
+	{
+		if (untouchable == 0)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
 	}
 }
 

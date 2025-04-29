@@ -13,6 +13,9 @@
 #include "BackgroundObject.h"
 #include "Mushroom.h"
 #include "MysteryBox.h"
+#include "PiranhaPlant.h"
+#include "Koopa.h"
+
 
 #include "SampleKeyEventHandler.h"
 
@@ -122,7 +125,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, false); break;
 
 
 	case OBJECT_TYPE_BRICK_ARRAY:
@@ -253,14 +256,32 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_MYSTERY_BOX:
 	{
-		if (tokens.size() < 5) return;
+		if (tokens.size() < 6) return;
 		int animation_id_active = atoi(tokens[3].c_str());
 		int animation_id_used = atoi(tokens[4].c_str());
-		obj = new CMysteryBox(x, y, animation_id_active, animation_id_used);
+		int spawn_object_id = atoi(tokens[5].c_str());
+
+		obj = new CMysteryBox(x, y, animation_id_active, animation_id_used, spawn_object_id);
 
 		objects.push_back(obj);
-		return;
+		break;
 	}
+	
+	case OBJECT_TYPE_PIRANHA_PLANT:
+	{
+		if (tokens.size() < 4) return;
+		bool isShootFire = atoi(tokens[3].c_str()) == 1;
+		obj = new CPiranhaPlant(x, y, isShootFire);
+		break;
+	}
+
+	case OBJECT_TYPE_KOOPA:
+	{
+		if (tokens.size() < 4) return;
+		obj = new CKoopa(x, y);
+		break;
+	}
+
 
 	case OBJECT_TYPE_SMALL_BUSH:
 	{

@@ -1,5 +1,5 @@
-﻿  Koopa.cpp
-D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\Koopa.h(50,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-  (compiling source file 'Koopa.cpp')
+﻿  Mario.cpp
+D:\Code\Repos\Super-Mario-3-Clone\05-SceneManager\Koopa.h(56,22): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  (compiling source file 'Mario.cpp')
   
   05-SceneManager.vcxproj -> D:\Code\Repos\Super-Mario-3-Clone\Debug\05-SceneManager.exe

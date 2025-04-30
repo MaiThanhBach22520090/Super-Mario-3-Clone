@@ -53,13 +53,27 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    if ((state == KOOPA_STATE_SHELL || state == KOOPA_STATE_SHELL_MOVING) &&
+    // If Koopa is in shell and timeout has passed, return to walking
+    if ((state == KOOPA_STATE_SHELL || state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT) &&
         (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
     {
-		// Move Koopa up to avoid being stuck in the ground
-		y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
-        SetState(KOOPA_STATE_WALKING);
+        // If being carried, drop from Mario before switching back to walking
+        if (beingCarried)
+        {
+            beingCarried = false;
+            x += (nx >= 0 ? 6 : -6); // offset from Mario
 
+        }
+
+        y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
+        SetState(KOOPA_STATE_WALKING);
+    }
+
+    if (beingCarried)
+    {
+        vx = 0;
+        vy = 0;
+        return;
     }
 
     CGameObject::Update(dt, coObjects);

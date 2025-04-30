@@ -28,6 +28,37 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 
+	#pragma region Handle Koopa
+
+	if (isCarrying && carriedKoopa != nullptr)
+	{
+		float offsetX = nx > 0 ? 12.0f : -12.0f; // adjust for your sprite
+		float offsetY = -6.0f; // height adjustment
+		carriedKoopa->SetPosition(x + offsetX, y + offsetY);
+	}
+
+	if (isCarrying && carriedKoopa)
+	{
+		// Drop it if it's no longer in shell state
+		int koopaState = carriedKoopa->GetState();
+		if (koopaState == KOOPA_STATE_WALKING)
+		{
+			isCarrying = false;
+			carriedKoopa->SetBeingCarried(false);
+			carriedKoopa = nullptr;
+		}
+		else
+		{
+			// Carry position sync
+			carriedKoopa->SetPosition(x + nx * 10, y);
+		}
+	}
+
+
+	#pragma endregion
+
+	
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -161,39 +192,71 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
 	if (!koopa) return;
 
-	if (e->ny < 0) // Mario stomps Koopa
+	int koopaState = koopa->GetState();
+
+	// If Mario is carrying the Koopa but it turns back to walking, drop it
+	if (isCarrying && carriedKoopa == koopa && koopaState == KOOPA_STATE_WALKING)
 	{
-		int state = koopa->GetState();
-
-		if (state == KOOPA_STATE_WALKING)
-		{
-			koopa->SetState(KOOPA_STATE_SHELL);
-		}
-		else if (state == KOOPA_STATE_SHELL)
-		{
-			// Start sliding
-			koopa->OnStompedByMario(x);
-		}
-		else if (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT)
-		{
-			// Stop sliding and go back to shell
-			koopa->SetState(KOOPA_STATE_SHELL);
-		}
-
-		vy = -MARIO_JUMP_DEFLECT_SPEED; // bounce
+		isCarrying = false;
+		carriedKoopa->SetBeingCarried(false);
+		carriedKoopa = nullptr;
 	}
-	else // Mario is hit from side
+
+	if (e->ny < 0)
 	{
-		if (untouchable == 0)
+		// Mario stomped the Koopa
+		if (koopaState == KOOPA_STATE_WALKING ||
+			koopaState == KOOPA_STATE_SHELL_MOVING_LEFT ||
+			koopaState == KOOPA_STATE_SHELL_MOVING_RIGHT)
 		{
-			if (level > MARIO_LEVEL_SMALL)
+			koopa->SetState(KOOPA_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopaState == KOOPA_STATE_SHELL)
+		{
+			if ((state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT) && !isCarrying)
 			{
-				level = MARIO_LEVEL_SMALL;
-				StartUntouchable();
+				isCarrying = true;
+				carriedKoopa = koopa;
+				koopa->SetBeingCarried(true);
 			}
 			else
 			{
-				SetState(MARIO_STATE_DIE);
+				// Kick if not carrying
+				koopa->OnStompedByMario(x);
+			}
+		}
+	}
+	else
+	{
+		// Side collision
+		if (isCarrying && carriedKoopa == koopa)
+		{
+			// Could add logic to drop or throw here
+		}
+		else if (koopaState == KOOPA_STATE_SHELL &&
+			(state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT) &&
+			!isCarrying)
+		{
+			isCarrying = true;
+			carriedKoopa = koopa;
+			koopa->SetBeingCarried(true);
+		}
+		else if (koopaState == KOOPA_STATE_WALKING ||
+			koopaState == KOOPA_STATE_SHELL_MOVING_LEFT ||
+			koopaState == KOOPA_STATE_SHELL_MOVING_RIGHT)
+		{
+			if (untouchable == 0)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					SetState(MARIO_STATE_DIE);
+				}
 			}
 		}
 	}
@@ -204,6 +267,19 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
+
+void CMario::ReleaseCarriedKoopa()
+{
+	if (isCarrying && carriedKoopa != nullptr)
+	{
+		carriedKoopa->SetBeingCarried(false);
+		carriedKoopa->SetState(nx > 0 ? KOOPA_STATE_SHELL_MOVING_RIGHT : KOOPA_STATE_SHELL_MOVING_LEFT);
+		carriedKoopa->SetPosition(x + (nx > 0 ? 6 : -6), y - 6);
+		isCarrying = false;
+		carriedKoopa = nullptr;
+	}
+}
+
 
 // Get animation ID for small Mario
 int CMario::GetAniIdSmall()

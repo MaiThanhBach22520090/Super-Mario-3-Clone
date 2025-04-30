@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 
+#include "Koopa.h"
+
 #include "debug.h"
 
 #define MARIO_WALKING_SPEED		0.1f
@@ -108,6 +110,9 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
+	bool isCarrying = false;
+	CKoopa* carriedKoopa = nullptr;
+
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
@@ -160,5 +165,8 @@ public:
 
 	float GetX() { return x; }
 	float GetY() { return y; }
+
+	void ReleaseCarriedKoopa();
+
 
 };

@@ -30,6 +30,10 @@ protected:
     ULONGLONG die_start;
     bool isFacingRight = false;
 
+    bool beingCarried = false;
+
+
+
     virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     virtual void OnNoCollision(DWORD dt);
     virtual void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -46,6 +50,8 @@ public:
     virtual int IsBlocking() { return 0; };
 
     void OnStompedByMario(float marioX);
+    void SetBeingCarried(bool carried) { beingCarried = carried; }
+    bool IsBeingCarried() { return beingCarried; }
 
 	int GetX() { return x; }
 };

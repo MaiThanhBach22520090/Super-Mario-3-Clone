@@ -204,6 +204,15 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 	if (e->ny < 0)
 	{
+		// Mario stomped The Paratroopa
+		if (koopaState == KOOPA_STATE_PARATROOPA)
+		{
+			koopa->SetState(KOOPA_STATE_WALKING);
+			koopa->SetWings(false);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else
+
 		// Mario stomped the Koopa
 		if (koopaState == KOOPA_STATE_WALKING ||
 			koopaState == KOOPA_STATE_SHELL_MOVING_LEFT ||

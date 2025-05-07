@@ -14,6 +14,12 @@
 #define KOOPA_STATE_SHELL_MOVING 300
 #define KOOPA_STATE_SHELL_MOVING_LEFT  301
 #define KOOPA_STATE_SHELL_MOVING_RIGHT 302
+#define KOOPA_STATE_PARATROOPA 400
+
+#define PARATROOPA_JUMP_SPEED        0.5f
+#define PARATROOPA_GRAVITY           0.00015f
+#define PARATROOPA_JUMP_INTERVAL     1000
+#define ID_ANI_PARATROOPA_WINGED     10050
 
 #define KOOPA_DIE_TIMEOUT 5000
 
@@ -25,33 +31,36 @@
 class CKoopa : public CGameObject
 {
 protected:
-    float ax;
-    float ay;
-    ULONGLONG die_start;
-    bool isFacingRight = false;
+    float ax, ay;
+    int aniId;
 
     bool beingCarried = false;
 
+    // Paratroopa jump
+    bool isParatroopa = false;
+    bool hasWings = false;
+    bool isOnGround = false;
+    ULONGLONG lastJumpTime = 0;
 
+    ULONGLONG die_start;
 
-    virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-    virtual void OnNoCollision(DWORD dt);
-    virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
-public:
-    CKoopa(float x, float y);
-
-    virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-    virtual void Render();
-    virtual void SetState(int state);
-
+    void UpdateJump(DWORD dt);
 
     virtual int IsCollidable() { return 1; };
-    virtual int IsBlocking() { return 0; };
+    virtual int IsBlocking() { return 0; }
+
+public:
+    CKoopa(float x, float y, bool isParatroopa = false);
+
+    void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+    void OnNoCollision(DWORD dt) override;
+    void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
     void OnStompedByMario(float marioX);
-    void SetBeingCarried(bool carried) { beingCarried = carried; }
-    bool IsBeingCarried() { return beingCarried; }
 
-	int GetX() { return x; }
+    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) override;
+    void Render() override;
+    void SetState(int state) override;
+    void SetBeingCarried(bool carried) { beingCarried = carried; }
+    void SetWings(bool wings) { hasWings = wings; isParatroopa = wings; }
 };

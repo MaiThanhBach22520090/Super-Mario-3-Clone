@@ -15,6 +15,7 @@
 #include "MysteryBox.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
+#include "Paratroopa.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -126,7 +127,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, false); break;
-	case OBJECT_TYPE_KOOPA:	obj = new CKoopa(x, y);	break;
+	case OBJECT_TYPE_KOOPA:	obj = new CKoopa(x, y, false);	break;
+	case OBJECT_TYPE_PARATROOPA: obj = new CKoopa(x, y, true); break;
 
 
 	case OBJECT_TYPE_BRICK_ARRAY:

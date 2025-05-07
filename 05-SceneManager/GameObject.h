@@ -71,4 +71,7 @@ public:
 	~CGameObject();
 
 	static bool IsDeleted(const LPGAMEOBJECT &o) { return o->isDeleted; }
+
+	float GetX() { return x; }
+	float GetY() { return y; }
 };

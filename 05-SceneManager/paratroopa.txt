@@ -1,0 +1,11 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# Wing Animation
+90160	162	3	169	16	70
+90161	171	3	178	16	70	
+
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+10050	90160	100	90161	100

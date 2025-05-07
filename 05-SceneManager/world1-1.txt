@@ -13,6 +13,7 @@ mushroom.txt
 mysteryBox.txt
 piranhaPlant.txt
 koopa.txt
+paratroopa.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -80,7 +81,7 @@ koopa.txt
 #2	240	176
 
 # KOOPA
-14	120	120
+15	120	120
 
 
 # MARIO

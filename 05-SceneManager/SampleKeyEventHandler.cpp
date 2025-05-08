@@ -17,7 +17,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+	
+			mario->SetState(MARIO_STATE_JUMP); // normal jump
+		if (mario->IsFalling() && mario->GetLevel() == MARIO_LEVEL_RACCOON)
+			mario->Flap(); // <- NEW: trigger glide flap
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);

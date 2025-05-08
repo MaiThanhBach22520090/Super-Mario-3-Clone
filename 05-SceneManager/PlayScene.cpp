@@ -140,8 +140,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int arr_size = atoi(tokens[3].c_str());
 		int gap = atoi(tokens[4].c_str());
 		int sprite_id = atoi(tokens[5].c_str());
-		int cellWidth = 16;
-		int cellHeight = 16;
+		float cellWidth = 16;
+		float cellHeight = 16;
 		int IsHorizontal = atoi(tokens[6].c_str());
 
 		if (IsHorizontal == 1)
@@ -327,8 +327,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int entrance_right = atoi(tokens[5].c_str());
 		int body_left = atoi(tokens[6].c_str());
 		int body_right = atoi(tokens[7].c_str());
-		int cellWidth = 16;
-		int cellHeight = 16;
+		float cellWidth = 16;
+		float cellHeight = 16;
 
 		// Entrance
 		CGameObject* entrance_left_obj = new cSolidBlock(x, y, entrance_left, cellWidth, cellHeight);

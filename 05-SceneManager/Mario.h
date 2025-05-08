@@ -92,9 +92,10 @@
 // RACCOON MARIO
 #pragma region Raccoon
 
-#pragma region Small
+#define MARIO_RACOON_TAIL_WIDTH_DIFF 6
+
 #define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2100
-#define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2102
+#define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2101
 
 #define ID_ANI_MARIO_RACCOON_WALKING_RIGHT 2200
 #define ID_ANI_MARIO_RACCOON_WALKING_LEFT 2201
@@ -102,25 +103,25 @@
 #define ID_ANI_MARIO_RACCOON_RUNNING_RIGHT 2300
 #define ID_ANI_MARIO_RACCOON_RUNNING_LEFT 2301
 
-#define ID_ANI_MARIO_RACCOON_BRACE_RIGHT 2400
-#define ID_ANI_MARIO_RACCOON_BRACE_LEFT 2401
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT 2400
+#define ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT 2401
 
-#define ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT 2500
-#define ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT 2501
+#define ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT 2500
+#define ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT 2501
 
-#define ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT 2600
-#define ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT 2601
+#define ID_ANI_MARIO_RACCOON_SIT_RIGHT 2600
+#define ID_ANI_MARIO_RACCOON_SIT_LEFT 2601
+
+#define ID_ANI_MARIO_RACCOON_BRACE_RIGHT 2700
+#define ID_ANI_MARIO_RACCOON_BRACE_LEFT 2701
 
 #pragma endregion
 
 #define GROUND_Y 160.0f
 
-
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
-#define MARIO_LEVEL_RACOON	3
+#define MARIO_LEVEL_RACCOON	3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
@@ -144,6 +145,8 @@ class CMario : public CGameObject
 
 	bool isCarrying = false;
 	CKoopa* carriedKoopa = nullptr;
+	ULONGLONG flapTimer;
+
 
 	int level; 
 	int untouchable; 
@@ -161,6 +164,7 @@ class CMario : public CGameObject
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdRaccoon();
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -170,7 +174,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_SMALL;
+		level = MARIO_LEVEL_RACCOON;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -198,7 +202,14 @@ public:
 	float GetX() { return x; }
 	float GetY() { return y; }
 
-	void ReleaseCarriedKoopa();
+	float GetRenderX();
+	int GetLevel() { return level; }
 
+	bool isGliding = false;
+
+	void ReleaseCarriedKoopa();
+	bool IsOnGround() { return isOnPlatform; }
+	void Flap();
+	bool IsFalling() { return vy > 0; }
 
 };

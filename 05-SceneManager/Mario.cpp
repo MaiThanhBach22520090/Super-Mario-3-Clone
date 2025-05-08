@@ -12,6 +12,8 @@
 #include "PiranhaPlant.h"
 #include "Koopa.h"
 
+
+
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -57,7 +59,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	#pragma endregion
 
-	
+	if (!isGliding)
+		ay = MARIO_GRAVITY;
+
+	if (isGliding && GetTickCount64() - flapTimer > 300)
+	{
+		isGliding = false;
+	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -408,6 +416,64 @@ int CMario::GetAniIdBig()
 	return aniId;
 }
 
+// Get animation ID for raccoon Mario
+int CMario::GetAniIdRaccoon()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_RACCOON_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_RACCOON_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_RACCOON_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_RACCOON_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_RACCOON_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_RACCOON_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_RACCOON_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_RACCOON_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_RACCOON_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_RACCOON_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_RACCOON_WALKING_LEFT;
+			}
+	if (aniId == -1) aniId = ID_ANI_MARIO_RACCOON_IDLE_RIGHT;
+
+	return aniId;
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -419,12 +485,24 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_RACCOON)
+		aniId = GetAniIdRaccoon();
 
-	animations->Get(aniId)->Render(x, y);
+	animations->Get(aniId)->Render(GetRenderX(), y);
 
 	//RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
+}
+
+float CMario::GetRenderX()
+{
+	if (level == MARIO_LEVEL_RACCOON)
+	{
+		if (nx > 0) return x;                     
+		else return x + MARIO_RACOON_TAIL_WIDTH_DIFF;
+	}
+	return x;
 }
 
 void CMario::SetState(int state)
@@ -509,7 +587,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level==MARIO_LEVEL_BIG || level == MARIO_LEVEL_RACCOON)
 	{
 		if (isSitting)
 		{
@@ -544,4 +622,15 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 }
+
+void CMario::Flap()
+{
+	if (isOnPlatform) return; // Don't flap on ground
+
+	isGliding = true;
+	vy = 0.05f; // Slow falling speed, or even a slight upward lift
+	ay = 0.0003f; // Slower descent while gliding
+	flapTimer = GetTickCount64(); // optional: track last flap time
+}
+
 

@@ -13,6 +13,8 @@
 #define ID_TEX_ENEMIES		40
 #define ID_TEX_STAGE_TILES	50
 #define ID_TEX_POWER_UPS	60
+#define ID_TEX_ENENIES3		70
+#define ID_TEX_MARIO3		80
 
 
 #define OBJECT_TYPE_MARIO	0

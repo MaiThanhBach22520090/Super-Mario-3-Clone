@@ -14,6 +14,7 @@ mysteryBox.txt
 piranhaPlant.txt
 koopa.txt
 paratroopa.txt
+raccoonMario.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -72,7 +73,7 @@ paratroopa.txt
 12	136	120	10022	10021	11000
 
 # PIRANHA PLANTS
-13	360	152	1
+#13	360	152	1
 
 # TUNNELS
 8	352	144	4	10001	10002	10003	10004
@@ -81,7 +82,7 @@ paratroopa.txt
 #2	240	176
 
 # KOOPA
-15	120	120
+#15	120	120
 
 
 # MARIO

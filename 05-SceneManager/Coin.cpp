@@ -27,7 +27,7 @@ void CCoin::Update(DWORD dt)
 	}
 	else // falling
 	{
-		DWORD now = GetTickCount64();
+		ULONGLONG now = GetTickCount64();
 		if (now - spawnTime >= COIN_LIFETIME_AFTER_FALL)
 		{
 			Delete();

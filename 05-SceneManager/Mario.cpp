@@ -59,17 +59,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	#pragma endregion
 
-	if (!isGliding)
-		ay = MARIO_GRAVITY;
-
-	if (isGliding && GetTickCount64() - flapTimer > 300)
+	if (isOnPlatform)
 	{
-		isGliding = false;
+		ay = MARIO_GRAVITY;
 	}
+
+	HandleFlying(dt);
+	HandleGliding(dt);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+#pragma region Collision
 void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
@@ -84,11 +85,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
-	}
+	else
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = 0;
+		}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -221,28 +222,28 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		}
 		else
 
-		// Mario stomped the Koopa
-		if (koopaState == KOOPA_STATE_WALKING ||
-			koopaState == KOOPA_STATE_SHELL_MOVING_LEFT ||
-			koopaState == KOOPA_STATE_SHELL_MOVING_RIGHT)
-		{
-			koopa->SetState(KOOPA_STATE_SHELL);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
-		else if (koopaState == KOOPA_STATE_SHELL)
-		{
-			if ((state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT) && !isCarrying)
+			// Mario stomped the Koopa
+			if (koopaState == KOOPA_STATE_WALKING ||
+				koopaState == KOOPA_STATE_SHELL_MOVING_LEFT ||
+				koopaState == KOOPA_STATE_SHELL_MOVING_RIGHT)
 			{
-				isCarrying = true;
-				carriedKoopa = koopa;
-				koopa->SetBeingCarried(true);
+				koopa->SetState(KOOPA_STATE_SHELL);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
 			}
-			else
+			else if (koopaState == KOOPA_STATE_SHELL)
 			{
-				// Kick if not carrying
-				koopa->OnStompedByMario(x);
+				if ((state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT) && !isCarrying)
+				{
+					isCarrying = true;
+					carriedKoopa = koopa;
+					koopa->SetBeingCarried(true);
+				}
+				else
+				{
+					// Kick if not carrying
+					koopa->OnStompedByMario(x);
+				}
 			}
-		}
 	}
 	else
 	{
@@ -284,6 +285,10 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
+
+
+#pragma endregion
+
 
 void CMario::ReleaseCarriedKoopa()
 {
@@ -515,7 +520,14 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		ax = MARIO_ACCEL_RUN_X;
+		if (abs(vx < MARIO_WALKING_SPEED))
+		{
+			ax = MARIO_ACCEL_WALK_X;
+		}
+		else
+		{
+			ax = MARIO_ACCEL_RUN_X;
+		}
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
@@ -557,7 +569,7 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -580,7 +592,25 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+
+	case MARIO_STATE_FLYING:
+		if (!isOnPlatform && canFly && level == MARIO_LEVEL_RACCOON)
+		{
+			vy = -MARIO_AIRJUMP_RUN_SPEED_Y;
+			ay = MARIO_FLYING_GRAVITY;
+
+			isFlying = true;
+		}
+		break;
+	case MARIO_STATE_GLIDING:
+		if (!isOnPlatform && level == MARIO_LEVEL_RACCOON)
+		{
+			isGliding = true;
+			vy = 0.0f;
+			ay = MARIO_GLIDING_GRAVITY;
+		}
 	}
+
 
 	CGameObject::SetState(state);
 }
@@ -623,14 +653,58 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
-void CMario::Flap()
+void CMario::HandleFlying(DWORD dt)
 {
-	if (isOnPlatform) return; // Don't flap on ground
+	if (isFlying)
+	{
+		currentFlyingTime += dt;
+		if (currentFlyingTime > MARIO_MAX_FLYING_TIME)
+		{
+			isFlying = false;
+			currentFlyingTime = 0;
+			ay = MARIO_GRAVITY;
+			canFly = false;
 
-	isGliding = true;
-	vy = 0.05f; // Slow falling speed, or even a slight upward lift
-	ay = 0.0003f; // Slower descent while gliding
-	flapTimer = GetTickCount64(); // optional: track last flap time
+			// Slowly reduce speed
+			if (abs(vx) > MARIO_RUNNING_SPEED)
+			{
+				if (vx > 0)
+				{
+					vx -= MARIO_FLYING_DECELERATION * dt;
+				}
+				else
+				{
+					vx += MARIO_FLYING_DECELERATION * dt;
+				}
+			}
+		}
+	}
+
+	if (isOnPlatform)
+	{
+		if (abs(this->vx) == MARIO_RUNNING_SPEED)
+		{
+			canFly = true;
+		}
+		else
+		{
+			canFly = false;
+		}
+	}
+}
+
+void CMario::HandleGliding(DWORD dt)
+{
+	if (isGliding)
+	{
+		currentGlidingTime += dt;
+		if (currentGlidingTime >= MARIO_GLIDING_TIME)
+		{
+			isGliding = false;
+			currentGlidingTime = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
 }
 
 

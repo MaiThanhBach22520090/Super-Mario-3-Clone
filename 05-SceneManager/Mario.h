@@ -8,18 +8,30 @@
 
 #include "debug.h"
 
+#pragma region Stats
+
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_RUN_X	0.00005f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
+#define MARIO_AIRJUMP_RUN_SPEED_Y	0.25f
+#define MARIO_FLYING_DECELERATION 0.001f
+
 #define MARIO_GRAVITY			0.002f
+#define MARIO_FLYING_GRAVITY	0.0003f
+#define MARIO_GLIDING_GRAVITY	0.0005f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
+
+#pragma endregion
+
+
+#pragma region STATE
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -34,6 +46,11 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_FLYING 700
+#define MARIO_STATE_GLIDING 701
+
+#pragma endregion
 
 
 #pragma region ANIMATION_ID
@@ -117,6 +134,11 @@
 
 #pragma endregion
 
+#pragma endregion
+
+
+#pragma region OTHER STUFF
+
 #define GROUND_Y 160.0f
 
 #define	MARIO_LEVEL_SMALL	1
@@ -136,6 +158,12 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
+#define MARIO_MAX_FLYING_TIME 2000
+#define MARIO_GLIDING_TIME 100000
+
+#pragma endregion
+
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -145,14 +173,19 @@ class CMario : public CGameObject
 
 	bool isCarrying = false;
 	CKoopa* carriedKoopa = nullptr;
-	ULONGLONG flapTimer;
-
 
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+
+	// Raccoon
+	bool isFlying = false;
+	bool canFly = false;
+	float currentFlyingTime = 0;
+	bool isGliding = false;
+	float currentGlidingTime = 0;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -205,11 +238,7 @@ public:
 	float GetRenderX();
 	int GetLevel() { return level; }
 
-	bool isGliding = false;
-
 	void ReleaseCarriedKoopa();
-	bool IsOnGround() { return isOnPlatform; }
-	void Flap();
-	bool IsFalling() { return vy > 0; }
-
+	void HandleFlying(DWORD dt);
+	void HandleGliding(DWORD dt);
 };

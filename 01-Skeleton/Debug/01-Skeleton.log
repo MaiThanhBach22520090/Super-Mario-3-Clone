@@ -1,1 +1,15 @@
-﻿
+﻿  Bullet.cpp
+  debug.cpp
+  Door.cpp
+  EnemyTank.cpp
+  Game.cpp
+D:\Code\Repos\Super-Mario-3-Clone\01-Skeleton\EnemyTank.cpp(25,72): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\01-Skeleton\EnemyTank.cpp(27,75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\01-Skeleton\EnemyTank.cpp(71,30): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  GameObject.cpp
+  main.cpp
+  Tank.cpp
+D:\Code\Repos\Super-Mario-3-Clone\01-Skeleton\Tank.cpp(34,72): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Code\Repos\Super-Mario-3-Clone\01-Skeleton\Tank.cpp(36,75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+D:\Visual Studio\IDE\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(1151,5): error MSB6006: "link.exe" exited with code 1.

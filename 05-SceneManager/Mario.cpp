@@ -66,6 +66,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	HandleFlying(dt);
 	HandleGliding(dt);
+	HandleTailAttack(dt, coObjects);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -114,7 +115,13 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (goomba->HasWings())
+		{
+			goomba->SetWings(false);
+			goomba->SetGravity(GOOMBA_GRAVITY);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -425,6 +432,24 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
+	if (isAttacking)
+	{
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT;
+		return aniId;
+	}
+
+	if (isFlying)
+	{
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_RACCOON_FLYING_RIGHT;
+		else
+			aniId = ID_ANI_MARIO_RACCOON_FLYING_LEFT;
+		return aniId;
+	}
+
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -442,7 +467,8 @@ int CMario::GetAniIdRaccoon()
 				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
 		}
 	}
-	else
+	else 
+	{
 		if (isSitting)
 		{
 			if (nx > 0)
@@ -451,6 +477,7 @@ int CMario::GetAniIdRaccoon()
 				aniId = ID_ANI_MARIO_RACCOON_SIT_LEFT;
 		}
 		else
+		{
 			if (vx == 0)
 			{
 				if (nx > 0) aniId = ID_ANI_MARIO_RACCOON_IDLE_RIGHT;
@@ -474,6 +501,9 @@ int CMario::GetAniIdRaccoon()
 				else if (ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_RACCOON_WALKING_LEFT;
 			}
+		}
+	}
+	
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACCOON_IDLE_RIGHT;
 
 	return aniId;
@@ -495,17 +525,18 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(GetRenderX(), y);
 
-	//RenderBoundingBox();
+
+	RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
 float CMario::GetRenderX()
 {
-	if (level == MARIO_LEVEL_RACCOON)
+	if (level == MARIO_LEVEL_RACCOON && !isAttacking)
 	{
-		if (nx > 0) return x;                     
-		else return x + MARIO_RACOON_TAIL_WIDTH_DIFF;
+		if (nx > 0) return x - MARIO_RACOON_TAIL_WIDTH_DIFF/2;                     
+		else return x + MARIO_RACOON_TAIL_WIDTH_DIFF/2;
 	}
 	return x;
 }
@@ -520,14 +551,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		if (abs(vx < MARIO_WALKING_SPEED))
-		{
-			ax = MARIO_ACCEL_WALK_X;
-		}
-		else
-		{
-			ax = MARIO_ACCEL_RUN_X;
-		}
+		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
@@ -609,8 +633,14 @@ void CMario::SetState(int state)
 			vy = 0.0f;
 			ay = MARIO_GLIDING_GRAVITY;
 		}
+		break;
+	case MARIO_STATE_TAIL_ATTACK:
+		if (level == MARIO_LEVEL_RACCOON)
+		{
+			isAttacking = true;
+		}
+		break;
 	}
-
 
 	CGameObject::SetState(state);
 }
@@ -698,7 +728,7 @@ void CMario::HandleGliding(DWORD dt)
 	if (isGliding)
 	{
 		currentGlidingTime += dt;
-		if (currentGlidingTime >= MARIO_GLIDING_TIME)
+		if (currentGlidingTime >= MARIO_FLAPING_TIME_PER_FRAME * 6)
 		{
 			isGliding = false;
 			currentGlidingTime = 0;
@@ -707,4 +737,55 @@ void CMario::HandleGliding(DWORD dt)
 	}
 }
 
+void CMario::ResetTailAttackAnimation()
+{
+	currentTailAttackTime = 0;
+}
 
+void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (isAttacking)
+	{
+		currentTailAttackTime += dt;
+		if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5)
+		{
+			isAttacking = false;
+			currentTailAttackTime = 0;
+		}
+	}
+
+	if (tail) {
+		/*float tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
+		float tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;*/
+		float tailX;
+		float tailY;
+
+		if ((currentTailAttackTime >= 0 && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME) ||
+			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4 && currentTailAttackTime <= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5))
+		{
+			tail->SetActive(true);
+			tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
+			tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
+		}
+		if ((currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2) ||
+			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3 && currentTailAttackTime <= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4))
+		{
+			tail->SetActive(false);
+			tailX = x;
+			tailY = y;
+		}
+		else if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2 && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3)
+		{
+			tail->SetActive(true);
+			tailX = (nx > 0) ? x - MARIO_BIG_BBOX_WIDTH / 2 : x + TAIL_BBOX_WIDTH;
+			tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
+		}
+		
+		
+
+		tail->SetPosition(tailX, tailY);
+		tail->SetActive(isAttacking);
+		tail->Update(dt, coObjects);
+
+	}
+}

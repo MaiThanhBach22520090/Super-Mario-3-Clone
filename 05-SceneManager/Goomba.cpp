@@ -1,10 +1,12 @@
 #include "Goomba.h"
 
-CGoomba::CGoomba(float x, float y):CGameObject(x, y)
+
+CGoomba::CGoomba(float x, float y, bool hasWings):CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = GOOMBA_GRAVITY;
+	this->ay = hasWings ? PARAGOOMBA_GRAVITY : GOOMBA_GRAVITY; 
 	die_start = -1;
+	this->hasWings = hasWings;
 	SetState(GOOMBA_STATE_WALKING);
 }
 
@@ -40,6 +42,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0 )
 	{
 		vy = 0;
+		if (e->ny < 0) isOnGround = true;
 	}
 	else if (e->nx != 0)
 	{
@@ -58,6 +61,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
+	HandleJump(dt);
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -71,7 +76,22 @@ void CGoomba::Render()
 		aniId = ID_ANI_GOOMBA_DIE;
 	}
 
+	// Render 2 Wings If hasWings
+
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
+
+	if (hasWings)
+	{
+		float wingOffsetX = 8;
+		float wingOffsetY = -8;
+		CAnimations::GetInstance()->Get(ID_ANI_WING_RIGHT)->Render(x + wingOffsetX, y + wingOffsetY);
+
+		CAnimations::GetInstance()->Get(ID_ANI_WING_LEFT)->Render(x - wingOffsetX, y + wingOffsetY);
+
+
+	}
+
 	RenderBoundingBox();
 }
 
@@ -90,5 +110,19 @@ void CGoomba::SetState(int state)
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
 			break;
+	}
+}
+
+void CGoomba::HandleJump(DWORD dt)
+{
+	if (hasWings)
+	{
+		ULONGLONG now = GetTickCount64();
+		if (isOnGround && now - lastJumpTime >= PARAGOOMBA_JUMP_INTERVAL)
+		{
+			vy = -PARAGOOMBA_JUMP_SPEED;
+			isOnGround = false;
+			lastJumpTime = now;
+		}
 	}
 }

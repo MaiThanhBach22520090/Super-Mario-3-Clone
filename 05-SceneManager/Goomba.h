@@ -12,16 +12,29 @@
 #define GOOMBA_DIE_TIMEOUT 500
 
 #define GOOMBA_STATE_WALKING 100
+#define GOOMBA_STATE_JUMPING 101
+
 #define GOOMBA_STATE_DIE 200
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
+
+#define ID_ANI_WING_RIGHT     10050
+#define ID_ANI_WING_LEFT     10051
+
+#define PARAGOOMBA_JUMP_SPEED 0.2f
+#define PARAGOOMBA_GRAVITY 0.0005f
+#define PARAGOOMBA_JUMP_INTERVAL 2000
 
 class CGoomba : public CGameObject
 {
 protected:
 	float ax;				
 	float ay; 
+
+	bool hasWings = false;
+	bool isOnGround = false;
+	ULONGLONG lastJumpTime = 0;
 
 	ULONGLONG die_start;
 
@@ -36,6 +49,11 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	
-	CGoomba(float x, float y);
+	CGoomba(float x, float y, bool hasWings);
 	virtual void SetState(int state);
+
+	void HandleJump(DWORD dt);
+	bool HasWings() { return hasWings; }
+	void SetWings(bool hasWings) { this->hasWings = hasWings; }
+	void SetGravity(float gravity) { this->ay = gravity; }
 };

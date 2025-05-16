@@ -20,6 +20,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_GLIDING);
 		mario->SetState(MARIO_STATE_FLYING);
 		mario->SetState(MARIO_STATE_JUMP);
+
 		break;
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
@@ -33,7 +34,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	case DIK_A:
+		mario->ResetTailAttackAnimation();
+		mario->SetState(MARIO_STATE_TAIL_ATTACK);
+		break;
 	}
+
 }
 
 void CSampleKeyHandler::OnKeyUp(int KeyCode)
@@ -77,4 +83,6 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
+
+
 }

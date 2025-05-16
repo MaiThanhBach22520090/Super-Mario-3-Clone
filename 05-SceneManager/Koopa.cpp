@@ -1,17 +1,17 @@
 #include "Koopa.h"
 
-CKoopa::CKoopa(float x, float y, bool isParatroopa) : CGameObject(x, y)
+CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
 {
     this->ax = 0;
     this->ay = KOOPA_GRAVITY;
     die_start = -1;
 
-    this->isParatroopa = isParatroopa;
-    this->hasWings = isParatroopa;
+    this->isParatroopa = hasWings;
+    this->hasWings = hasWings;
     this->isOnGround = false;
     this->lastJumpTime = GetTickCount64();
 
-    SetState(isParatroopa ? KOOPA_STATE_PARATROOPA : KOOPA_STATE_WALKING);
+    SetState(hasWings ? KOOPA_STATE_PARATROOPA : KOOPA_STATE_WALKING);
 }
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -64,7 +64,15 @@ void CKoopa::OnStompedByMario(float marioX)
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (hasWings) UpdateJump(dt);
+    if (hasWings)
+    {
+        ay = PARATROOPA_GRAVITY;
+        UpdateJump(dt);
+    }
+	else
+	{
+		ay = KOOPA_GRAVITY;
+	}
 
     vy += ay * dt;
     vx += ax * dt;
@@ -102,8 +110,6 @@ void CKoopa::UpdateJump(DWORD dt)
         isOnGround = false;
         lastJumpTime = now;
     }
-
-    vy += PARATROOPA_GRAVITY * dt;
 }
 
 
@@ -120,9 +126,12 @@ void CKoopa::Render()
 
     if (hasWings)
     {
-        float wingOffsetX = 0;
-        float wingOffsetY = -4;
-        CAnimations::GetInstance()->Get(ID_ANI_PARATROOPA_WINGED)->Render(x + wingOffsetX, y + wingOffsetY);
+		int wingOffsetY = 8;
+
+		if (vx < 0)
+			CAnimations::GetInstance()->Get(ID_ANI_WING_RIGHT)->Render(x + KOOPA_BBOX_WIDTH / 2, y - wingOffsetY);
+		else
+			CAnimations::GetInstance()->Get(ID_ANI_WING_LEFT)->Render(x - KOOPA_BBOX_WIDTH / 2, y - wingOffsetY);
     }
 
     RenderBoundingBox();

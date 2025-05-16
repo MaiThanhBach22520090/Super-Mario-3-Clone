@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "Koopa.h"
+#include "Tail.h"
 
 #include "debug.h"
 
@@ -14,7 +15,7 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.00005f
+#define MARIO_ACCEL_RUN_X	0.0008f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
@@ -23,8 +24,8 @@
 #define MARIO_FLYING_DECELERATION 0.001f
 
 #define MARIO_GRAVITY			0.002f
-#define MARIO_FLYING_GRAVITY	0.0003f
-#define MARIO_GLIDING_GRAVITY	0.0005f
+#define MARIO_FLYING_GRAVITY	0.0002f
+#define MARIO_GLIDING_GRAVITY	0.0003f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -49,6 +50,9 @@
 
 #define MARIO_STATE_FLYING 700
 #define MARIO_STATE_GLIDING 701
+#define MARIO_STATE_FLAPING	702
+
+#define MARIO_STATE_TAIL_ATTACK 800
 
 #pragma endregion
 
@@ -109,8 +113,6 @@
 // RACCOON MARIO
 #pragma region Raccoon
 
-#define MARIO_RACOON_TAIL_WIDTH_DIFF 6
-
 #define ID_ANI_MARIO_RACCOON_IDLE_RIGHT 2100
 #define ID_ANI_MARIO_RACCOON_IDLE_LEFT 2101
 
@@ -132,6 +134,12 @@
 #define ID_ANI_MARIO_RACCOON_BRACE_RIGHT 2700
 #define ID_ANI_MARIO_RACCOON_BRACE_LEFT 2701
 
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_RIGHT	2800
+#define ID_ANI_MARIO_RACCOON_TAIL_ATTACK_LEFT	2801
+
+#define ID_ANI_MARIO_RACCOON_FLYING_RIGHT	2810
+#define ID_ANI_MARIO_RACCOON_FLYING_LEFT	2811
+
 #pragma endregion
 
 #pragma endregion
@@ -145,9 +153,9 @@
 #define	MARIO_LEVEL_BIG		2
 #define MARIO_LEVEL_RACCOON	3
 
-#define MARIO_BIG_BBOX_WIDTH  14
-#define MARIO_BIG_BBOX_HEIGHT 24
-#define MARIO_BIG_SITTING_BBOX_WIDTH  14
+#define MARIO_BIG_BBOX_WIDTH  15
+#define MARIO_BIG_BBOX_HEIGHT 26
+#define MARIO_BIG_SITTING_BBOX_WIDTH  15
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
@@ -155,11 +163,14 @@
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
+#define MARIO_RACOON_TAIL_WIDTH_DIFF 8
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
 #define MARIO_MAX_FLYING_TIME 2000
-#define MARIO_GLIDING_TIME 100000
+#define MARIO_FLAPING_TIME_PER_FRAME 75
+
+#define MARIO_TAIL_ATTACK_TIME_PER_FRAME 100
 
 #pragma endregion
 
@@ -186,6 +197,10 @@ class CMario : public CGameObject
 	float currentFlyingTime = 0;
 	bool isGliding = false;
 	float currentGlidingTime = 0;
+	bool isAttacking = false;
+	DWORD currentTailAttackTime = 0;
+	CTail* tail = nullptr;
+
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -212,7 +227,18 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+
+		tail = new CTail(x, y);
 	}
+
+	~CMario()
+	{
+		if (tail != nullptr)
+			delete tail;
+		if (carriedKoopa != nullptr)
+			carriedKoopa = nullptr;
+	}
+
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
@@ -241,4 +267,7 @@ public:
 	void ReleaseCarriedKoopa();
 	void HandleFlying(DWORD dt);
 	void HandleGliding(DWORD dt);
+
+	void ResetTailAttackAnimation();
+	void HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 };

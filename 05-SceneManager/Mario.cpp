@@ -176,7 +176,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMysteryBox(LPCOLLISIONEVENT e)
 {
 	CMysteryBox* box = dynamic_cast<CMysteryBox*>(e->obj);
-	if (box != NULL)
+	if (box != nullptr && e->ny > 0)
 	{
 		box->SetState(MYSTERY_BOX_STATE_HIT);
 	}
@@ -694,6 +694,7 @@ void CMario::HandleFlying(DWORD dt)
 		{
 			isFlying = false;
 			currentFlyingTime = 0;
+			vy = 0.0f;
 			ay = MARIO_GRAVITY;
 			canFly = false;
 

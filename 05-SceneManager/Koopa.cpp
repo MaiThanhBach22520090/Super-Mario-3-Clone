@@ -1,5 +1,6 @@
 #include "Koopa.h"
 #include "Platform.h"
+#include "MysteryBox.h"
 
 CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
 {
@@ -30,6 +31,8 @@ void CKoopa::OnNoCollision(DWORD dt)
 
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+    OnCollisionWithMysteryBox(e);
+
     if (!e->obj->IsBlocking()) return;
     if (dynamic_cast<CKoopa*>(e->obj)) return;
 
@@ -45,6 +48,18 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
     else if (e->nx != 0)
     {
         vx = -vx;
+    }
+
+}
+
+void CKoopa::OnCollisionWithMysteryBox(LPCOLLISIONEVENT e)
+{
+    CMysteryBox* box = dynamic_cast<CMysteryBox*>(e->obj);
+    if (box != nullptr &&
+        (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT) &&
+        e->nx != 0) // Side hit only
+    {
+        box->SetState(MYSTERY_BOX_STATE_HIT);
     }
 }
 

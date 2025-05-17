@@ -61,6 +61,8 @@ public:
     void OnNoCollision(DWORD dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
+	void OnCollisionWithMysteryBox(LPCOLLISIONEVENT e);
+
     void OnStompedByMario(float marioX);
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) override;

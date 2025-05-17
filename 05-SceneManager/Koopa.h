@@ -30,6 +30,9 @@
 #define ID_ANI_KOOPA_SHELL 10042
 #define ID_ANI_KOOPA_SHELL_MOVING 10043
 
+#define PROBE_DISTANCE 2.0f
+#define PROBE_DEPTH    2.0f
+
 class CKoopa : public CGameObject
 {
 protected:
@@ -65,4 +68,5 @@ public:
     void SetState(int state) override;
     void SetBeingCarried(bool carried) { beingCarried = carried; }
     void SetWings(bool wings) { hasWings = wings; isParatroopa = wings; }
+    void CheckForCliff(const vector<LPGAMEOBJECT>* collidableObjects);
 };

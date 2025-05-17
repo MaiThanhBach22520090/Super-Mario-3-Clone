@@ -687,6 +687,8 @@ void CMario::HandleFlying(DWORD dt)
 {
 	if (isFlying)
 	{
+		ay = MARIO_FLYING_GRAVITY;
+
 		currentFlyingTime += dt;
 		if (currentFlyingTime > MARIO_MAX_FLYING_TIME)
 		{
@@ -728,7 +730,7 @@ void CMario::HandleGliding(DWORD dt)
 	if (isGliding)
 	{
 		currentGlidingTime += dt;
-		if (currentGlidingTime >= MARIO_FLAPING_TIME_PER_FRAME * 6)
+		if (currentGlidingTime >= MARIO_FLAPING_TIME_PER_FRAME * 3)
 		{
 			isGliding = false;
 			currentGlidingTime = 0;

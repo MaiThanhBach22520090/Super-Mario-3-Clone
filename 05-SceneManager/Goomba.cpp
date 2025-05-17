@@ -126,3 +126,5 @@ void CGoomba::HandleJump(DWORD dt)
 		}
 	}
 }
+
+

@@ -36,6 +36,7 @@ public:
 	void RenderBoundingBox();
 
 	int IsDirectionColliable(float nx, float ny);
+	int IsCollidable() { return isSolid; }
 };
 
 typedef CPlatform* LPPLATFORM;

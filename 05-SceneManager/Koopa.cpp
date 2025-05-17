@@ -1,4 +1,5 @@
 #include "Koopa.h"
+#include "Platform.h"
 
 CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
 {
@@ -37,6 +38,9 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         vy = 0;
         if (e->ny < 0 && isParatroopa && hasWings)
             isOnGround = true;
+
+		if (vy == 0)
+			isOnGround = true;
     }
     else if (e->nx != 0)
     {
@@ -90,12 +94,16 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         SetState(KOOPA_STATE_WALKING);
     }
 
+
     if (beingCarried)
     {
         vx = 0;
         vy = 0;
         return;
     }
+
+    if (!hasWings && state == KOOPA_STATE_WALKING && isOnGround)
+        CheckForCliff(coObjects);
 
     CGameObject::Update(dt, coObjects);
     CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -162,5 +170,37 @@ void CKoopa::SetState(int state)
     case KOOPA_STATE_SHELL_MOVING_RIGHT:
         vx = KOOPA_SHELL_SPEED;
         break;
+    }
+}
+
+void CKoopa::CheckForCliff(const vector<LPGAMEOBJECT>* coObjects)
+{
+    float probeX = (vx > 0)
+        ? x + KOOPA_BBOX_WIDTH / 2 + PROBE_DISTANCE
+        : x - KOOPA_BBOX_WIDTH / 2 - PROBE_DISTANCE;
+       float probeY = y + KOOPA_BBOX_HEIGHT + PROBE_DEPTH;
+
+    bool hasGround = false;
+
+    for (LPGAMEOBJECT obj : *coObjects)
+    {
+        if (dynamic_cast<CPlatform*>(obj))
+        {
+            float l, t, r, b;
+            obj->GetBoundingBox(l, t, r, b);
+
+            if (probeX >= l && probeX <= r && probeY >= t && probeY <= b)
+            {
+                hasGround = true;
+                break;
+            }
+        }
+    }
+
+
+    if (!hasGround)
+    {
+        vx = -vx;
+        nx = -nx;
     }
 }

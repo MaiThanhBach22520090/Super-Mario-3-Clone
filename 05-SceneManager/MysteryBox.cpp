@@ -1,6 +1,7 @@
 #include "MysteryBox.h"
 #include "Mushroom.h"
 #include "Coin.h"
+#include "Leaf.h"
 #include "Animations.h"
 #include "PlayScene.h"
 
@@ -19,7 +20,14 @@ void CMysteryBox::OnNoCollision(DWORD dt)
 
 void CMysteryBox::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-
+	if (dynamic_cast<CMario*>(e->obj))
+	{
+		CMario* mario = dynamic_cast<CMario*>(e->obj);
+		if (e->ny < 0)
+		{
+			SetState(MYSTERY_BOX_STATE_HIT);
+		}
+	}
 }
 
 void CMysteryBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -47,14 +55,25 @@ void CMysteryBox::SetState(int state)
 		// Spawn mushroom slightly above the box
 		LPPLAYSCENE scene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 
-		if (spawnObjectId == 10020) // Mushroom
+		if (spawnObjectId == 10020)
 		{
-			// Spawn a mushroom
-			float x = this->x;
-			float y = this->y - MYSTERY_BOX_BBOX_HEIGHT;
-			// Create a new mushroom object
-			CMushroom* mushroom = new CMushroom(x, y, spawnObjectId);
-			scene->AddObject(mushroom);
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			{
+				CLeaf* leaf = new CLeaf(this->x, this->y - MYSTERY_BOX_BBOX_HEIGHT);
+				scene->AddObject(leaf);
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
+			{
+				mario->AddPoint(1000);
+			}
+			else
+			{
+				
+				CMushroom* mushroom = new CMushroom(this->x, this->y - MYSTERY_BOX_BBOX_HEIGHT, spawnObjectId);
+				scene->AddObject(mushroom);
+			}
+
 		}
 		else if (spawnObjectId == 11000) // Coin
 		{

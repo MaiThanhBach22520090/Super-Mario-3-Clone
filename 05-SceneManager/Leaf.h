@@ -19,12 +19,19 @@
 
 class CLeaf : public CGameObject
 {
-public:
-	CLeaf(float x, float y) : CGameObject(x, y)
-	{
-	}
 
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
+
+protected:
+	float ax, ay;
+	float originX;
+	bool goingUp = true;
+	bool movingRight = true;
+	DWORD spawnTime;
+
+public:
+	CLeaf(float x, float y);
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 
@@ -32,7 +39,5 @@ public:
 	int IsBlocking() { return 0; }
 
 	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e) {};
-
 };
 

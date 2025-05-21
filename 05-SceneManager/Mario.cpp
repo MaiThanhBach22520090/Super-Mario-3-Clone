@@ -11,7 +11,7 @@
 #include "MysteryBox.h"
 #include "PiranhaPlant.h"
 #include "Koopa.h"
-
+#include "Leaf.h"
 
 
 #include "Collision.h"
@@ -106,6 +106,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPiranhaPlant(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -283,6 +285,19 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
+		}
+	}
+}
+
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
+	if (leaf != NULL)
+	{
+		leaf->Delete();
+		if (level == MARIO_LEVEL_BIG)
+		{
+			SetLevel(MARIO_LEVEL_RACCOON);
 		}
 	}
 }

@@ -296,7 +296,6 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 #pragma endregion
 
-
 void CMario::ReleaseCarriedKoopa()
 {
 	if (isCarrying && carriedKoopa != nullptr)
@@ -309,6 +308,7 @@ void CMario::ReleaseCarriedKoopa()
 	}
 }
 
+#pragma region Animation
 
 // Get animation ID for small Mario
 int CMario::GetAniIdSmall()
@@ -467,7 +467,7 @@ int CMario::GetAniIdRaccoon()
 				aniId = ID_ANI_MARIO_RACCOON_JUMP_WALK_LEFT;
 		}
 	}
-	else 
+	else
 	{
 		if (isSitting)
 		{
@@ -503,11 +503,15 @@ int CMario::GetAniIdRaccoon()
 			}
 		}
 	}
-	
+
 	if (aniId == -1) aniId = ID_ANI_MARIO_RACCOON_IDLE_RIGHT;
 
 	return aniId;
 }
+
+#pragma endregion
+
+
 
 void CMario::Render()
 {
@@ -525,8 +529,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(GetRenderX(), y);
 
-
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -728,6 +731,13 @@ void CMario::HandleFlying(DWORD dt)
 
 void CMario::HandleGliding(DWORD dt)
 {
+	if (isOnPlatform)
+	{
+		isGliding = false;
+		currentGlidingTime = 0;
+		ay = MARIO_GRAVITY;
+	}
+
 	if (isGliding)
 	{
 		currentGlidingTime += dt;

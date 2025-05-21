@@ -60,9 +60,9 @@ void CMysteryBox::SetState(int state)
 		{
 			// Spawn a coin
 			float x = this->x;
-			float y = this->y - MYSTERY_BOX_BBOX_HEIGHT;
+			float y = this->y - MYSTERY_BOX_BBOX_HEIGHT - 48;
 			// Create a new coin object
-			CCoin* coin = new CCoin(x, y , true);
+			CCoin* coin = new CCoin(x, y, true);
 			scene->AddObject(coin);
 		}
 

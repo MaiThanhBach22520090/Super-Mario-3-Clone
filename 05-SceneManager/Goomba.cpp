@@ -92,12 +92,12 @@ void CGoomba::Render()
 
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)
 {
-	CGameObject::SetState(state);
+	CGameObject::SetState(state);	
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:

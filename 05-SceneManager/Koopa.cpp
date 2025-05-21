@@ -157,7 +157,7 @@ void CKoopa::Render()
 			CAnimations::GetInstance()->Get(ID_ANI_WING_LEFT)->Render(x - KOOPA_BBOX_WIDTH / 2, y - wingOffsetY);
     }
 
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 void CKoopa::SetState(int state)
 {

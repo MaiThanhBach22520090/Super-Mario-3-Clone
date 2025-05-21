@@ -265,6 +265,8 @@ public:
 	int GetLevel() { return level; }
 
 	void ReleaseCarriedKoopa();
+	void AddPoint(int coin) { this->coin += coin; }
+
 	void HandleFlying(DWORD dt);
 	void HandleGliding(DWORD dt);
 

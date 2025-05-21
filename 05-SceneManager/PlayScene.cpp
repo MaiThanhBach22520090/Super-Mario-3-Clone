@@ -16,6 +16,7 @@
 #include "PiranhaPlant.h"
 #include "Koopa.h"
 #include "Paratroopa.h"
+#include "Leaf.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -137,6 +138,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y, false); break;
 	case OBJECT_TYPE_KOOPA:	obj = new CKoopa(x, y, false);	break;
 	case OBJECT_TYPE_PARATROOPA: obj = new CKoopa(x, y, true); break;
+	case OBJECT_TYPE_LEAF:	obj = new CLeaf(x, y);	break;
+
 
 
 	case OBJECT_TYPE_BRICK_ARRAY:
@@ -284,6 +287,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+
 	case OBJECT_TYPE_MYSTERY_BOX:
 	{
 		if (tokens.size() < 6) return;
@@ -304,7 +308,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPiranhaPlant(x, y, isShootFire);
 		break;
 	}
-
 
 
 

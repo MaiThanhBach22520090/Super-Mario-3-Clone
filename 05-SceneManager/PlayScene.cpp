@@ -17,6 +17,7 @@
 #include "Koopa.h"
 #include "Paratroopa.h"
 #include "Leaf.h"
+#include "BackPlatform.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -198,42 +199,64 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_BACK_PLATFORM:
 	{
-		// Input format: object_type x y cell_width cell_height length height sprite_base_id
+		//Format: object_type x y cell_width cell_height length height sprite_base_id
+
+		#pragma region Old
+		//if (tokens.size() < 8) return;
+
+		//float cell_width = (float)atof(tokens[3].c_str());
+		//float cell_height = (float)atof(tokens[4].c_str());
+		//int length = atoi(tokens[5].c_str());
+		//int height = atoi(tokens[6].c_str());
+		//int sprite_base_id = atoi(tokens[7].c_str());
+
+
+
+		//// Middle - background
+		//for (int i = 1; i < height - 1; i++)
+		//{
+		//	obj = new CPlatform(x, y + i * cell_height, cell_width, cell_height, length,
+		//		sprite_base_id + 4, sprite_base_id + 5, sprite_base_id + 6,
+		//		false); // background
+		//	objects.push_back(obj);
+		//}
+
+		//// Bottom - background
+		//if (height < 2) return;
+		//obj = new CPlatform(x, y + (height - 1) * cell_height, cell_width, cell_height, length,
+		//	sprite_base_id + 7, sprite_base_id + 8, sprite_base_id + 9,
+		//	false); // background
+		//objects.push_back(obj);
+
+		//// Top platform - solid
+		//obj = new CPlatform(
+		//	x, y,
+		//	cell_width, cell_height, length,
+		//	sprite_base_id + 1, sprite_base_id + 2, sprite_base_id + 3, true
+		//);
+		//objects.push_back(obj);
+
+		#pragma endregion
 
 		if (tokens.size() < 8) return;
-
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
+
 		int length = atoi(tokens[5].c_str());
 		int height = atoi(tokens[6].c_str());
+
 		int sprite_base_id = atoi(tokens[7].c_str());
+		if (length <= 0 || height <= 0) return;
+		if (cell_width <= 0 || cell_height <= 0) return;
 
-
-
-		// Middle - background
-		for (int i = 1; i < height - 1; i++)
-		{
-			obj = new CPlatform(x, y + i * cell_height, cell_width, cell_height, length,
-				sprite_base_id + 4, sprite_base_id + 5, sprite_base_id + 6,
-				false); // background
-			objects.push_back(obj);
-		}
-
-		// Bottom - background
-		if (height < 2) return;
-		obj = new CPlatform(x, y + (height - 1) * cell_height, cell_width, cell_height, length,
-			sprite_base_id + 7, sprite_base_id + 8, sprite_base_id + 9,
-			false); // background
-		objects.push_back(obj);
-
-		// Top platform - solid
-		obj = new CPlatform(
+		// Create the back platform object
+		obj = new BackPlatform(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_base_id + 1, sprite_base_id + 2, sprite_base_id + 3, true
+			cell_width, cell_height, length, height,
+			sprite_base_id
 		);
-		objects.push_back(obj);
 
+		objects.push_back(obj);
 
 		return;
 	}

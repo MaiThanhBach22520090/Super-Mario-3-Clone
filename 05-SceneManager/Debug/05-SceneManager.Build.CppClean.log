@@ -1,6 +1,5 @@
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\vc143.pdb
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\vc143.idb
-d:\code\repos\super-mario-3-clone\05-scenemanager\debug\platform.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\piranhaplant.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\paratroopa.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\mysterybox.obj
@@ -17,6 +16,7 @@ d:\code\repos\super-mario-3-clone\05-scenemanager\debug\debug.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\collision.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\coin.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\brick.obj
+d:\code\repos\super-mario-3-clone\05-scenemanager\debug\backplatform.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\backgroundobject.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\animations.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\animation.obj
@@ -30,7 +30,7 @@ d:\code\repos\super-mario-3-clone\05-scenemanager\debug\solidblock.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\samplekeyeventhandler.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\portal.obj
 d:\code\repos\super-mario-3-clone\05-scenemanager\debug\playscene.obj
-d:\code\repos\super-mario-3-clone\05-scenemanager\debug\backplatform.obj
+d:\code\repos\super-mario-3-clone\05-scenemanager\debug\platform.obj
 d:\code\repos\super-mario-3-clone\debug\d3dcompiler_43.dll
 d:\code\repos\super-mario-3-clone\debug\d3dx9d_43.dll
 d:\code\repos\super-mario-3-clone\debug\d3dx10d_43.dll

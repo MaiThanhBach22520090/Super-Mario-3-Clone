@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
 
@@ -496,17 +496,33 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	// Get target player Y position
+	float px, py;
+	player->GetPosition(px, py);
 
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+	CGame* game = CGame::GetInstance();
 
-	if (cx < 0) cx = 0;
+	// Fixed X camera (center screen)
+	float camX = px - game->GetBackBufferWidth() / 2;
+	if (camX < 0) camX = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	// Target Y position: Mario 2/3 up the screen
+	float targetCamY = py - game->GetBackBufferHeight() * 2 / 3;
+
+	// Clamp target Y if needed
+	if (targetCamY > 224 || targetCamY > 100) targetCamY = 224;
+	if (targetCamY < 0) targetCamY = 0;
+
+	// Get current cam Y
+	float currentCamX, currentCamY;
+	game->GetCamPos(currentCamX, currentCamY);
+
+	// Smoothly interpolate Y
+	const float SMOOTH_Y = 0.05f;
+	float camY = currentCamY + (targetCamY - currentCamY) * SMOOTH_Y;
+
+	// Apply camera position
+	game->SetCamPos(camX, camY);
 
 	PurgeDeletedObjects();
 }

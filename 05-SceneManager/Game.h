@@ -100,7 +100,7 @@ public:
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
 
-	static CGame* GetInstance();
+	static CGame* GetInstance();	
 
 	void SetPointSamplerState();
 

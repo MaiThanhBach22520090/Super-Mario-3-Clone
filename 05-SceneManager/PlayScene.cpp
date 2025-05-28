@@ -18,6 +18,7 @@
 #include "Paratroopa.h"
 #include "Leaf.h"
 #include "BackPlatform.h"
+#include "Ground.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -140,8 +141,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPA:	obj = new CKoopa(x, y, false);	break;
 	case OBJECT_TYPE_PARATROOPA: obj = new CKoopa(x, y, true); break;
 	case OBJECT_TYPE_LEAF:	obj = new CLeaf(x, y);	break;
-
-
 
 	case OBJECT_TYPE_BRICK_ARRAY:
 	{
@@ -310,7 +309,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-
 	case OBJECT_TYPE_MYSTERY_BOX:
 	{
 		if (tokens.size() < 6) return;
@@ -332,8 +330,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-
-
 	case OBJECT_TYPE_SMALL_BUSH:
 	{
 		// Input format: object_type x y lenght sprite_id
@@ -350,6 +346,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			objects.insert(objects.begin(), obj);
 		}
 	}
+
+	case OBJECT_TYPE_GROUND:
+	{
+		// Input format: object_type x y cell_width cell_height length height sprite_base_id
+		if (tokens.size() < 8) return;
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		int height = atoi(tokens[6].c_str());
+		int sprite_base_id = atoi(tokens[7].c_str());
+		if (length <= 0 || height <= 0) return;
+		if (cell_width <= 0 || cell_height <= 0) return;
+		CGameObject* obj = new CGround(
+			x, y,
+			cell_width, cell_height, length, height,
+			sprite_base_id
+		);
+
+		// Add the ground object to the scene
+		objects.push_back(obj);
+		return; // Skip the general object setup for ground
+
+	}
+	break;
 
 	case OBJECT_TYPE_TUNNEL:
 	{
@@ -383,8 +403,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 	}
 
-
-
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -393,7 +411,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
 	break;
-
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

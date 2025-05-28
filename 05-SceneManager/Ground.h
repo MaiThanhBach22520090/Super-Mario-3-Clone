@@ -1,20 +1,19 @@
 #pragma once
 #include "GameObject.h"
 
-
-class BackPlatform : public CGameObject
+class CGround : public CGameObject
 {
 protected:
-	int length;	
+	int length;
 	int height;
-	
+
 	float cellWidth;
 	float cellHeight;
 	int topSpriteIdBegin, topSpriteIdMiddle, topSpriteIdEnd;
 	int middleSpriteIdBegin, middleSpriteIdMiddle, middleSpriteIdEnd;
-	int bottomSpriteIdBegin, bottomSpriteIdMiddle, bottomSpriteIdEnd;
+
 public:
-	BackPlatform(float x, float y,
+	CGround(float x, float y,
 		float cell_width, float cell_height, int length, int height,
 		int sprite_base_id)
 		: CGameObject(x, y)
@@ -29,15 +28,12 @@ public:
 		this->middleSpriteIdBegin = sprite_base_id + 4;
 		this->middleSpriteIdMiddle = sprite_base_id + 5;
 		this->middleSpriteIdEnd = sprite_base_id + 6;
-		this->bottomSpriteIdBegin = sprite_base_id + 7;
-		this->bottomSpriteIdMiddle = sprite_base_id + 8;
-		this->bottomSpriteIdEnd = sprite_base_id + 9;
-	
 	}
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
-	int IsDirectionColliable(float nx, float ny);
+	int IsBlocking() { return 1; }
+	int IsCollidable() { return 1; }
 };
 

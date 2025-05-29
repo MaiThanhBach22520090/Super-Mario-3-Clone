@@ -393,7 +393,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		// Body
 		if (height < 2) return;
-		for (int i = 1; i < height - 1; i++)
+		for (int i = 1; i < height; i++)
 		{
 			CGameObject* body_left_obj = new cSolidBlock(x, y + i * cellHeight, body_left, cellWidth, cellHeight);
 			body_left_obj->SetPosition(x, y + i * cellHeight);

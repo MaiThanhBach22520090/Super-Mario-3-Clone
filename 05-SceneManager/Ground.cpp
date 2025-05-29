@@ -56,8 +56,6 @@ void CGround::Render()
 		if (length > 1)
 			s->Get(this->middleSpriteIdEnd)->Draw(xx, rowY);
 	}
-
-	RenderBoundingBox();
 }
 
 void CGround::GetBoundingBox(float& l, float& t, float& r, float& b)

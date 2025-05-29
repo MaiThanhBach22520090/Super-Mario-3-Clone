@@ -19,6 +19,7 @@
 #include "Leaf.h"
 #include "BackPlatform.h"
 #include "Ground.h"
+#include "Cloud.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -369,7 +370,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		return; // Skip the general object setup for ground
 
 	}
-	break;
+
+	case OBJECT_TYPE_CLOUD:
+	{
+		// Input format: object_type x y length sprite_base_id
+		if (tokens.size() < 5) return;
+		int length = atoi(tokens[3].c_str());
+		int sprite_base_id = atoi(tokens[4].c_str());
+		if (length <= 0) return;
+		CGameObject* obj = new CCloud(x, y, length, sprite_base_id);
+		objects.push_back(obj);
+		return; // Skip the general object setup for cloud
+	}
+
 
 	case OBJECT_TYPE_TUNNEL:
 	{

@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -775,45 +775,37 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isAttacking)
 	{
 		currentTailAttackTime += dt;
+
 		if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5)
 		{
 			isAttacking = false;
 			currentTailAttackTime = 0;
-		}
-	}
-
-	if (tail) {
-		/*float tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
-		float tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;*/
-		float tailX;
-		float tailY;
-
-		if ((currentTailAttackTime >= 0 && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME) ||
-			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4 && currentTailAttackTime <= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5))
-		{
-			tail->SetActive(true);
-			tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
-			tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
-		}
-		if ((currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2) ||
-			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3 && currentTailAttackTime <= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4))
-		{
 			tail->SetActive(false);
-			tailX = x;
-			tailY = y;
+			return;
 		}
-		else if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2 && currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3)
+
+		float tailX, tailY;
+
+		if (currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME ||
+			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4 &&
+				currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5))
 		{
-			tail->SetActive(true);
-			tailX = (nx > 0) ? x - MARIO_BIG_BBOX_WIDTH / 2 : x + TAIL_BBOX_WIDTH;
-			tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
+			tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
 		}
-		
-		
+		else if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2 &&
+			currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3)
+		{
+			tailX = (nx > 0) ? x - MARIO_BIG_BBOX_WIDTH / 2 : x + TAIL_BBOX_WIDTH;
+		}
+		else
+		{
+			tailX = x;
+		}
+
+		tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
 
 		tail->SetPosition(tailX, tailY);
-		tail->SetActive(isAttacking);
+		tail->SetActive(true);
 		tail->Update(dt, coObjects);
-
 	}
 }

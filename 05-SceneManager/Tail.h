@@ -18,10 +18,12 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void Render() override;
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
-	int IsCollidable() override { return isActive; }
+	int IsCollidable() const { return isActive ? 1 : 0; }
+	int IsBlocking() const { return 0; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoldenBrick(LPCOLLISIONEVENT e);
 };

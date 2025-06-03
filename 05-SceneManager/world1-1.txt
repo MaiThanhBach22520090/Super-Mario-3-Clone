@@ -85,7 +85,7 @@ raccoonMario.txt
 
 
 # Boundary
-#6	0	0	20	0	10000	0
+6	0	0	20	0	10063	0
 
 #SMALL BUSHES
 
@@ -159,6 +159,10 @@ raccoonMario.txt
 4	1664	112
 
 
+# Golden Brick
+19	120	400	1
+
+
 
 # PIRANHA PLANTS
 #13	360	156	1
@@ -178,7 +182,7 @@ raccoonMario.txt
 
 # KOOPA
 #14	512	140
-#15	120	120
+15	240	350
 
 #LEAF
 16	240	400

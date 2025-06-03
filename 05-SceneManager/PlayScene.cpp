@@ -20,6 +20,7 @@
 #include "BackPlatform.h"
 #include "Ground.h"
 #include "Cloud.h"
+#include "GoldenBrick.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -383,6 +384,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		return; // Skip the general object setup for cloud
 	}
 
+	case OBJECT_TYPE_GOLDEN_BRICK:
+	{
+		// Input format: object_type x y has_button
+		if (tokens.size() < 4) return;
+		bool hasButton = atoi(tokens[3].c_str()) == 1 ? true : false;
+		obj = new CGoldenBrick(x, y, hasButton);
+		break;
+	}
 
 	case OBJECT_TYPE_TUNNEL:
 	{

@@ -2,6 +2,7 @@
 #include "Goomba.h"
 #include "Koopa.h"
 #include "PlayScene.h"
+#include "GoldenBrick.h"
 
 
 CTail::CTail(float x, float y)
@@ -23,8 +24,8 @@ void CTail::Render()
 
 void CTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x;
-	t = y;
+	l = x - TAIL_BBOX_WIDTH / 2;
+	t = y - TAIL_BBOX_HEIGHT / 2;
 	r = x + TAIL_BBOX_WIDTH;
 	b = y + TAIL_BBOX_HEIGHT;
 }
@@ -35,13 +36,16 @@ void CTail::OnNoCollision(DWORD dt)
 
 void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (isActive == false) return;
+	if (!isActive) return;
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CGoldenBrick*>(e->obj))
+		OnCollisionWithGoldenBrick(e);
 }
+
 
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
@@ -60,4 +64,11 @@ void CTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 		koopa->SetState(KOOPA_STATE_SHELL);
 		koopa->SetWings(false);
 	}
+}
+
+void CTail::OnCollisionWithGoldenBrick(LPCOLLISIONEVENT e)
+{
+	CGoldenBrick* brick = dynamic_cast<CGoldenBrick*>(e->obj);
+	if (brick != NULL)
+		brick->OnCollisionWithTail(e);
 }

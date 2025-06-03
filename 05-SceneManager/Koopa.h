@@ -30,7 +30,7 @@
 #define ID_ANI_KOOPA_SHELL 10042
 #define ID_ANI_KOOPA_SHELL_MOVING 10043
 
-#define PROBE_DISTANCE 2.0f
+#define PROBE_DISTANCE 3.0f
 #define PROBE_DEPTH    2.0f
 
 class CKoopa : public CGameObject

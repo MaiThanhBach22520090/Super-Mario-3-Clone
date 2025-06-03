@@ -1,6 +1,8 @@
 #include "Koopa.h"
 #include "Platform.h"
 #include "MysteryBox.h"
+#include "Ground.h"
+#include "BackPlatform.h"
 
 CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
 {
@@ -199,7 +201,7 @@ void CKoopa::CheckForCliff(const vector<LPGAMEOBJECT>* coObjects)
 
     for (LPGAMEOBJECT obj : *coObjects)
     {
-        if (dynamic_cast<CPlatform*>(obj))
+        if (dynamic_cast<CGround*>(obj) || dynamic_cast<BackPlatform*>(obj))
         {
             float l, t, r, b;
             obj->GetBoundingBox(l, t, r, b);

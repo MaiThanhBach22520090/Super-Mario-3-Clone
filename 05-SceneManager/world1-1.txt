@@ -161,7 +161,9 @@ raccoonMario.txt
 
 # Golden Brick
 19	120	400	1
-
+19	136	400	0
+19	152	400	0
+19	168	400	0
 
 
 # PIRANHA PLANTS

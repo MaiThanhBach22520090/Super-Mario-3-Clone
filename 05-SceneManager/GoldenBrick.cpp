@@ -2,6 +2,9 @@
 #include "Button.h"
 #include "PlayScene.h"
 #include "Game.h"
+#include "Tail.h"
+#include "Koopa.h"
+#include "Coin.h"
 
 CGoldenBrick::CGoldenBrick(float x, float y, bool hasButton)
     : CGameObject(x, y)
@@ -82,5 +85,18 @@ void CGoldenBrick::OnCollisionWithShell(LPCOLLISIONEVENT e)
 
 void CGoldenBrick::OnButtonActivated()
 {
-    isCoin = true;
+	if (!containsButton)
+		// Delete This Brick And Spawn Coin.
+	{
+		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+		if (!isCoin)
+		{
+			isCoin = true;
+			LPGAMEOBJECT coin = new CCoin(x, y, 0);
+			scene->AddObject(coin);
+		}
+
+		destroyed = true;
+		this->Delete();
+	}
 }

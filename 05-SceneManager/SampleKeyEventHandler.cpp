@@ -10,7 +10,6 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
-
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
@@ -69,6 +68,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
+		if (mario->IsTeleporting()) return;
 		if (game->IsKeyDown(DIK_A))
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		else
@@ -76,6 +76,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
+		if (mario->IsTeleporting()) return;
 		if (game->IsKeyDown(DIK_A))
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else
@@ -83,6 +84,4 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-
-
 }

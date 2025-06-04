@@ -201,6 +201,13 @@ class CMario : public CGameObject
 	DWORD currentTailAttackTime = 0;
 	CTail* tail = nullptr;
 
+	// Teleport
+	bool isTeleporting = false;
+	int teleportPhase = 0; // 0: not teleporting, 1: sinking, 2: teleporting, 3: done
+	ULONGLONG teleportStartTime = 0;
+	float teleportDestinationX, teleportDestinationY;
+	float teleportSpeedY = 0;
+	float teleportStartY = 0;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -246,10 +253,10 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE); 
+		return (state != MARIO_STATE_DIE && isTeleporting ? 0 : 1); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0) && isTeleporting ? 0 : 1; ; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -262,6 +269,10 @@ public:
 	float GetX() { return x; }
 	float GetY() { return y; }
 
+	void SetTeleporting(bool teleporting) { isTeleporting = teleporting; }
+	bool IsTeleporting() { return isTeleporting; }
+	bool IsSitting() { return isSitting; }
+
 	float GetRenderX();
 	int GetLevel() { return level; }
 
@@ -273,4 +284,7 @@ public:
 
 	void ResetTailAttackAnimation();
 	void HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
+	void StartTeleport(float destX, float destY, bool goingDown);
+	void HandleTeleporting(DWORD dt);
 };

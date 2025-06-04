@@ -35,6 +35,9 @@
 61021	962	55	977	70	50
 61022	926	73	941	88	50
 
+# Hidden Room Brick
+61023	446	127	461	142	50
+
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]

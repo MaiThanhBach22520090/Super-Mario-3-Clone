@@ -22,12 +22,27 @@ public:
 		this->height = height;
 		this->cellWidth = cell_width;
 		this->cellHeight = cell_height;
-		this->topSpriteIdBegin = sprite_base_id + 1;
-		this->topSpriteIdMiddle = sprite_base_id + 2;
-		this->topSpriteIdEnd = sprite_base_id + 3;
-		this->middleSpriteIdBegin = sprite_base_id + 4;
-		this->middleSpriteIdMiddle = sprite_base_id + 5;
-		this->middleSpriteIdEnd = sprite_base_id + 6;
+
+		if (sprite_base_id != 61023)
+		{
+			this->topSpriteIdBegin = sprite_base_id + 1;
+			this->topSpriteIdMiddle = sprite_base_id + 2;
+			this->topSpriteIdEnd = sprite_base_id + 3;
+			this->middleSpriteIdBegin = sprite_base_id + 4;
+			this->middleSpriteIdMiddle = sprite_base_id + 5;
+			this->middleSpriteIdEnd = sprite_base_id + 6;
+		}
+		else
+		{
+			this->topSpriteIdBegin = 61023;
+			this->topSpriteIdMiddle = 61023;
+			this->topSpriteIdEnd = 61023;
+			this->middleSpriteIdBegin = 61023;
+			this->middleSpriteIdMiddle = 61023;
+			this->middleSpriteIdEnd = 61023;
+			
+		}
+
 	}
 	void Render();
 	void Update(DWORD dt) {}

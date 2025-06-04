@@ -14,7 +14,9 @@
 #include "Leaf.h"
 
 
+
 #include "Collision.h"
+#include "TeleportTunnel.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -67,6 +69,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	HandleFlying(dt);
 	HandleGliding(dt);
 	HandleTailAttack(dt, coObjects);
+	HandleTeleporting(dt);
+
+
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -807,5 +812,73 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tail->SetPosition(tailX, tailY);
 		tail->SetActive(true);
 		tail->Update(dt, coObjects);
+	}
+}
+
+void CMario::StartTeleport(float destX, float destY, bool goingDown)
+{
+	isTeleporting = true;
+	teleportPhase = 1;
+	teleportStartTime = GetTickCount64();
+	teleportDestinationX = destX;
+	teleportDestinationY = destY;
+	teleportSpeedY = goingDown ? TELEPORTING_SPEED : -TELEPORTING_SPEED;
+	teleportStartY = y;
+	vx = 0;
+	vy = teleportSpeedY;
+}
+
+void CMario::HandleTeleporting(DWORD dt)
+{
+	if (isTeleporting)
+	{
+		// Phase 1: Sink/Rise animation
+		if (teleportPhase == 1)
+		{
+			y += teleportSpeedY * dt;
+			vx = 0;
+			ay = 0;
+
+			// After TELEPORT_TIME, teleport
+			if (GetTickCount64() - teleportStartTime >= TELEPORT_TIME)
+			{
+				SetPosition(teleportDestinationX, teleportDestinationY);
+				teleportPhase = 2;
+				teleportStartTime = GetTickCount64();
+			}
+
+			return; // Skip normal update while teleporting
+		}
+
+		// Phase 2: Continue To Sink/Rise After Teleporting
+		else if (teleportPhase == 2)
+		{
+			y += teleportSpeedY * dt;
+			vx = 0;
+			ay = 0;
+
+			// After TELEPORT_TIME, teleport
+			if (GetTickCount64() - teleportStartTime >= TELEPORT_TIME)
+			{
+				teleportPhase = 3;
+				teleportStartTime = GetTickCount64();
+			}
+
+			return; // Skip normal update while teleporting
+		}
+
+		// Phase 3: Pause briefly before ending teleport
+		else if (teleportPhase == 3)
+		{
+			if (GetTickCount64() - teleportStartTime >= 100) // brief pause after arriving
+			{
+				isTeleporting = false;
+				teleportPhase = 0;
+				vy = 0;
+				SetState(MARIO_STATE_IDLE);
+			}
+			ay = MARIO_GRAVITY;
+			return; // Still in teleport delay
+		}
 	}
 }

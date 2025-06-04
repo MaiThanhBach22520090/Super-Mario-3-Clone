@@ -21,6 +21,7 @@
 #include "Ground.h"
 #include "Cloud.h"
 #include "GoldenBrick.h"
+#include "TeleportTunnel.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -390,6 +391,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() < 4) return;
 		bool hasButton = atoi(tokens[3].c_str()) == 1 ? true : false;
 		obj = new CGoldenBrick(x, y, hasButton);
+		break;
+	}
+
+	case OBJECT_TYPE_TELEPORT_TUNNEL:
+	{
+		// Input format: object_type x y width height target_scene_id
+		if (tokens.size() < 6) return;
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		bool isGoingDown = atoi(tokens[5].c_str()) == 1 ? true : false;
+		int target_position_x = atoi(tokens[6].c_str());
+		int target_position_y = atoi(tokens[7].c_str());
+		obj = new CTeleportTunnel(
+			x, y, width, height, isGoingDown,
+			target_position_x, target_position_y
+		);
 		break;
 	}
 

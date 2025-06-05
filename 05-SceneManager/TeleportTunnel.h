@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "GameObject.h"
 
-#define TELEPORT_TIME 400
-#define TELEPORTING_SPEED 0.05f
+#define TELEPORT_TIME 500
+#define TELEPORTING_SPEED 0.06f
 
 class CTeleportTunnel : public CGameObject
 {
@@ -11,7 +11,7 @@ protected:
     int height;
     bool isGoingDown;
     float teleportTime;
-
+    
     float teleportingTimer = 0;
 
     float teleportX;

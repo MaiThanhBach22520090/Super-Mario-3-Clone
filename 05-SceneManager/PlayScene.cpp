@@ -202,44 +202,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BACK_PLATFORM:
 	{
 		//Format: object_type x y cell_width cell_height length height sprite_base_id
-
-		#pragma region Old
-		//if (tokens.size() < 8) return;
-
-		//float cell_width = (float)atof(tokens[3].c_str());
-		//float cell_height = (float)atof(tokens[4].c_str());
-		//int length = atoi(tokens[5].c_str());
-		//int height = atoi(tokens[6].c_str());
-		//int sprite_base_id = atoi(tokens[7].c_str());
-
-
-
-		//// Middle - background
-		//for (int i = 1; i < height - 1; i++)
-		//{
-		//	obj = new CPlatform(x, y + i * cell_height, cell_width, cell_height, length,
-		//		sprite_base_id + 4, sprite_base_id + 5, sprite_base_id + 6,
-		//		false); // background
-		//	objects.push_back(obj);
-		//}
-
-		//// Bottom - background
-		//if (height < 2) return;
-		//obj = new CPlatform(x, y + (height - 1) * cell_height, cell_width, cell_height, length,
-		//	sprite_base_id + 7, sprite_base_id + 8, sprite_base_id + 9,
-		//	false); // background
-		//objects.push_back(obj);
-
-		//// Top platform - solid
-		//obj = new CPlatform(
-		//	x, y,
-		//	cell_width, cell_height, length,
-		//	sprite_base_id + 1, sprite_base_id + 2, sprite_base_id + 3, true
-		//);
-		//objects.push_back(obj);
-
-		#pragma endregion
-
 		if (tokens.size() < 8) return;
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
@@ -562,12 +524,24 @@ void CPlayScene::Update(DWORD dt)
 	float camX = px - game->GetBackBufferWidth() / 2;
 	if (camX < 0) camX = 0;
 
-	// Target Y position: Mario 2/3 up the screen
+	// Determine if Mario is in a hidden room (e.g., Y > 448)
+	isInHiddenRoom = py > 440;
+
+	// Default: follow Mario, keeping him 2/3 up the screen
 	float targetCamY = py - game->GetBackBufferHeight() * 2 / 3;
 
-	// Clamp target Y if needed
-	if (targetCamY > 224 || targetCamY > 100) targetCamY = 224;
-	if (targetCamY < 0) targetCamY = 0;
+	// Clamp for normal areas
+	if (!isInHiddenRoom)
+	{
+		if (targetCamY < 0) targetCamY = 0;
+		if (targetCamY > 224) targetCamY = 224; // Normal max Y
+	}
+	else
+	{
+		// If in hidden room, lock to a fixed Y camera value
+		targetCamY = 440; // Fixed Y position for hidden room
+	}
+
 
 	// Get current cam Y
 	float currentCamX, currentCamY;
@@ -575,7 +549,9 @@ void CPlayScene::Update(DWORD dt)
 
 	// Smoothly interpolate Y
 	const float SMOOTH_Y = 0.05f;
-	float camY = currentCamY + (targetCamY - currentCamY) * SMOOTH_Y;
+	float camY;
+	if (!isInHiddenRoom) camY = currentCamY + (targetCamY - currentCamY) * SMOOTH_Y;
+	else camY = targetCamY;
 
 	// Apply camera position
 	game->SetCamPos(camX, camY);

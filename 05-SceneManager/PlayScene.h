@@ -33,6 +33,8 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
+	bool isInHiddenRoom = false; // Flag to check if the player is in a hidden room
+
 	LPGAMEOBJECT GetPlayer() { return player; }
 
 	void Clear();

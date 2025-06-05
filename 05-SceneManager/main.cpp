@@ -42,14 +42,17 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #include "SampleKeyEventHandler.h"
 
 #include "AssetIDs.h"
+#include "PlayScene.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"04 - Collision"
 #define WINDOW_ICON_PATH L"mario.ico"
 
 #define BACKGROUND_COLOR D3DXCOLOR(181.0f/255, 235.0f/255, 242.0f/255, 0.0f)
+#define BACKGROUND_COLOR_HIDDEN D3DXCOLOR(255.0f/255, 255.0f/255, 255.0f/255, 0.0f)
 
-#define SCREEN_WIDTH 320
+
+#define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 240
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -86,7 +89,12 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	CPlayScene* scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+
+	if (scene != nullptr && scene->isInHiddenRoom)
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, D3DXCOLOR(0, 0, 0, 0)); // Black
+	else
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR); // Sky blue
 
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 

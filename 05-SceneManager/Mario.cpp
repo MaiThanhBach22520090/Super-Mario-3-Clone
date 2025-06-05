@@ -818,11 +818,15 @@ void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::StartTeleport(float destX, float destY, bool goingDown)
 {
 	isTeleporting = true;
+	vy = 0;
 	teleportPhase = 1;
 	teleportStartTime = GetTickCount64();
 	teleportDestinationX = destX;
 	teleportDestinationY = destY;
 	teleportSpeedY = goingDown ? TELEPORTING_SPEED : -TELEPORTING_SPEED;
+	// Debug Teleporting Speed
+	DebugOut(L"Teleporting Speed: %f\n", teleportSpeedY);
+
 	teleportStartY = y;
 	vx = 0;
 	vy = teleportSpeedY;
@@ -846,8 +850,6 @@ void CMario::HandleTeleporting(DWORD dt)
 				teleportPhase = 2;
 				teleportStartTime = GetTickCount64();
 			}
-
-			return; // Skip normal update while teleporting
 		}
 
 		// Phase 2: Continue To Sink/Rise After Teleporting
@@ -863,8 +865,6 @@ void CMario::HandleTeleporting(DWORD dt)
 				teleportPhase = 3;
 				teleportStartTime = GetTickCount64();
 			}
-
-			return; // Skip normal update while teleporting
 		}
 
 		// Phase 3: Pause briefly before ending teleport

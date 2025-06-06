@@ -287,6 +287,7 @@ public:
 
 	void ReleaseCarriedKoopa();
 	void AddPoint(int coin) { this->coin += coin; }
+	int GetCoinCount() { return coin; }
 
 	void HandleFlying(DWORD dt);
 	void HandleGliding(DWORD dt);

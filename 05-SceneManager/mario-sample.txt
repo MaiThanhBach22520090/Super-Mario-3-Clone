@@ -23,3 +23,4 @@ height	240
 60	textures\NES - Super Mario Bros 3 - Items and Objects.png
 70	textures\NES - Super Mario Bros 3 - Enemies.png
 80	textures\NES - Super Mario Bros 3 - Mario & Luigi.png
+90	textures\NES - Super Mario Bros 3 - HUD and Inventory.png

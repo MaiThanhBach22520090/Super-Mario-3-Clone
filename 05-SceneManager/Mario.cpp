@@ -316,18 +316,6 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 #pragma endregion
 
-void CMario::ReleaseCarriedKoopa()
-{
-	if (isCarrying && carriedKoopa != nullptr)
-	{
-		carriedKoopa->SetBeingCarried(false);
-		carriedKoopa->SetState(nx > 0 ? KOOPA_STATE_SHELL_MOVING_RIGHT : KOOPA_STATE_SHELL_MOVING_LEFT);
-		carriedKoopa->SetPosition(x + (nx > 0 ? 6 : -6), y - 6);
-		isCarrying = false;
-		carriedKoopa = nullptr;
-	}
-}
-
 #pragma region Animation
 
 // Get animation ID for small Mario
@@ -531,7 +519,7 @@ int CMario::GetAniIdRaccoon()
 
 #pragma endregion
 
-
+#pragma region Render
 
 void CMario::Render()
 {
@@ -574,13 +562,15 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		ax = MARIO_ACCEL_RUN_X;
+		if (fabs(vx) < MARIO_WALKING_SPEED) ax = MARIO_ACCEL_WALK_X;
+		else ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		ax = -MARIO_ACCEL_RUN_X;
+		if (fabs(vx) < MARIO_WALKING_SPEED) ax = -MARIO_ACCEL_WALK_X;
+		else ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
@@ -654,7 +644,7 @@ void CMario::SetState(int state)
 		{
 			isGliding = true;
 			vy = 0.0f;
-			ay = MARIO_GLIDING_GRAVITY;
+			ay = MARIO_GLIDE_GRAVITY;
 		}
 		break;
 	case MARIO_STATE_TAIL_ATTACK:
@@ -705,46 +695,58 @@ void CMario::SetLevel(int l)
 	}
 	level = l;
 }
+#pragma endregion
+
+#pragma region Handle Update
+
+void CMario::ReleaseCarriedKoopa()
+{
+	if (isCarrying && carriedKoopa != nullptr)
+	{
+		carriedKoopa->SetBeingCarried(false);
+		carriedKoopa->SetState(nx > 0 ? KOOPA_STATE_SHELL_MOVING_RIGHT : KOOPA_STATE_SHELL_MOVING_LEFT);
+		carriedKoopa->SetPosition(x + (nx > 0 ? 6 : -6), y - 6);
+		isCarrying = false;
+		carriedKoopa = nullptr;
+	}
+}
 
 void CMario::HandleFlying(DWORD dt)
 {
-	if (isFlying)
-	{
-		ay = MARIO_FLYING_GRAVITY;
-
-		currentFlyingTime += dt;
-		if (currentFlyingTime > MARIO_MAX_FLYING_TIME)
-		{
-			isFlying = false;
-			currentFlyingTime = 0;
-			vy = 0.0f;
-			ay = MARIO_GRAVITY;
-			canFly = false;
-
-			// Slowly reduce speed
-			if (abs(vx) > MARIO_RUNNING_SPEED)
-			{
-				if (vx > 0)
-				{
-					vx -= MARIO_FLYING_DECELERATION * dt;
-				}
-				else
-				{
-					vx += MARIO_FLYING_DECELERATION * dt;
-				}
-			}
-		}
-	}
-
+	// Check if Mario is on the ground to refresh flying permission
 	if (isOnPlatform)
 	{
-		if (abs(this->vx) == MARIO_RUNNING_SPEED)
-		{
+		if (abs(vx) >= MARIO_RUNNING_SPEED)
 			canFly = true;
-		}
 		else
-		{
 			canFly = false;
+	}
+
+	// Only run flying logic if flying
+	if (!isFlying) return;
+
+	// While flying, apply reduced gravity
+	ay = MARIO_FLYING_GRAVITY;
+
+	// Accumulate flying time
+	currentFlyingTime += dt;
+	if (currentFlyingTime >= MARIO_MAX_FLYING_TIME)
+	{
+		// Stop flying when time is up
+		isFlying = false;
+		canFly = false;
+		currentFlyingTime = 0;
+
+		// Restore normal gravity
+		ay = MARIO_GRAVITY;
+
+		// Smooth horizontal deceleration if moving too fast
+		if (abs(vx) > MARIO_RUNNING_SPEED)
+		{
+			if (vx > 0)
+				vx = max(vx - MARIO_FLYING_DECELERATION * dt, MARIO_RUNNING_SPEED);
+			else
+				vx = min(vx + MARIO_FLYING_DECELERATION * dt, -MARIO_RUNNING_SPEED);
 		}
 	}
 }
@@ -882,3 +884,7 @@ void CMario::HandleTeleporting(DWORD dt)
 		}
 	}
 }
+
+#pragma endregion
+
+

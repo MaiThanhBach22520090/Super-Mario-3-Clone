@@ -15,17 +15,26 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0008f
+#define MARIO_ACCEL_RUN_X	0.00008f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_AIRJUMP_RUN_SPEED_Y	0.25f
-#define MARIO_FLYING_DECELERATION 0.001f
+
+#define MARIO_FLY_FLAP_SPEED 0.18f
+#define MARIO_FLAP_COOLDOWN 120
+#define MARIO_AIR_DRAG 0.0004f
 
 #define MARIO_GRAVITY			0.002f
-#define MARIO_FLYING_GRAVITY	0.0002f
-#define MARIO_GLIDING_GRAVITY	0.0003f
+
+#define MARIO_FLYING_GRAVITY           0.0001f   
+#define MARIO_GLIDE_GRAVITY            0.0006f   
+#define MARIO_FLY_ASCEND_BOOST         0.0002f   
+#define MARIO_MAX_FLYING_ASCENT_SPEED  0.1f      
+#define MARIO_FLYING_DECELERATION      0.0002f
+#define MARIO_MAX_FLYING_TIME          2500 
+
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -167,7 +176,6 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
-#define MARIO_MAX_FLYING_TIME 2000
 #define MARIO_FLAPING_TIME_PER_FRAME 75
 
 #define MARIO_TAIL_ATTACK_TIME_PER_FRAME 100
@@ -195,6 +203,7 @@ class CMario : public CGameObject
 	bool isFlying = false;
 	bool canFly = false;
 	float currentFlyingTime = 0;
+	ULONGLONG lastFlapTime;
 	bool isGliding = false;
 	float currentGlidingTime = 0;
 	bool isAttacking = false;

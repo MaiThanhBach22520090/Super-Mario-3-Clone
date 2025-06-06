@@ -35,7 +35,7 @@ void CGoldenBrick::Render()
 
 void CGoldenBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTail*>(e->obj))
+	if (dynamic_cast<CMario*>(e->obj))
 	{
 		OnCollisionWithTail(e);
 	}
@@ -47,14 +47,24 @@ void CGoldenBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoldenBrick::OnCollisionWithTail(LPCOLLISIONEVENT e)
 {
+	//if (isCoin) return; // Already transformed to coin
+	//if (containsButton && !buttonRevealed)
+	//{
+	//	buttonRevealed = true;
+	//	LPGAMEOBJECT button = new CButton(x, y - 16);
+	//	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	//	scene->AddObject(button);
+	//}
+
 	if (isCoin) return; // Already transformed to coin
-	if (containsButton && !buttonRevealed)
+	if (containsButton && !buttonRevealed && e->nx != 0)
 	{
 		buttonRevealed = true;
 		LPGAMEOBJECT button = new CButton(x, y - 16);
 		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 		scene->AddObject(button);
 	}
+	
 
 }       
 

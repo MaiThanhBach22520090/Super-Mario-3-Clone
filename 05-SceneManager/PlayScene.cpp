@@ -22,6 +22,7 @@
 #include "Cloud.h"
 #include "GoldenBrick.h"
 #include "TeleportTunnel.h"
+#include "GUI.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -350,10 +351,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOLDEN_BRICK:
 	{
 		// Input format: object_type x y has_button
-		if (tokens.size() < 4) return;
+		/*if (tokens.size() < 4) return;
 		bool hasButton = atoi(tokens[3].c_str()) == 1 ? true : false;
 		obj = new CGoldenBrick(x, y, hasButton);
-		break;
+		break;*/
+
+		// Input format: object_type x y width length has_button;
+		if (tokens.size() < 5) return;
+		int width = atoi(tokens[3].c_str());
+		int length = atoi(tokens[4].c_str());
+		bool hasButton = atoi(tokens[5].c_str()) == 1 ? true : false;
+		if (length <= 0) return;	
+		
+		// Create an array of golden bricks
+		for (int i = 0; i < length; i++)
+		{
+			CGameObject* obj = new CGoldenBrick(x + i * width, y, hasButton);
+			obj->SetPosition(x + i * width, y);
+			objects.push_back(obj);
+		}
+		return;	
 	}
 
 	case OBJECT_TYPE_TELEPORT_TUNNEL:
@@ -411,6 +428,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
+
+	case OBJECT_TYPE_GUI:
+	{
+		// Input format: object_type x y
+		if (tokens.size() < 3) return;
+		obj = new CGUI(x, y);
+		break;
+	}
+
 	break;
 
 	default:
@@ -534,7 +560,7 @@ void CPlayScene::Update(DWORD dt)
 	if (!isInHiddenRoom)
 	{
 		if (targetCamY < 0) targetCamY = 0;
-		if (targetCamY > 224) targetCamY = 224; // Normal max Y
+		if (targetCamY > 50) targetCamY = 224; // Normal max Y
 	}
 	else
 	{

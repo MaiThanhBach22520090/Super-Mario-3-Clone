@@ -1,9 +1,8 @@
 #include "Tail.h"
 #include "Goomba.h"
 #include "Koopa.h"
-#include "PlayScene.h"
 #include "GoldenBrick.h"
-
+#include "Collision.h"
 
 CTail::CTail(float x, float y)
 {
@@ -14,6 +13,8 @@ CTail::CTail(float x, float y)
 
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!isActive) return;
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -24,8 +25,14 @@ void CTail::Render()
 
 void CTail::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - TAIL_BBOX_WIDTH / 2;
-	t = y - TAIL_BBOX_HEIGHT / 2;
+	if (!isActive)
+	{
+		l = t = r = b = 0;
+		return;
+	}
+
+	l = x;
+	t = y;
 	r = x + TAIL_BBOX_WIDTH;
 	b = y + TAIL_BBOX_HEIGHT;
 }
@@ -46,20 +53,17 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoldenBrick(e);
 }
 
-
 void CTail::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-	if (goomba != NULL)
-	{
+	if (goomba)
 		goomba->SetState(GOOMBA_STATE_DIE);
-	}
 }
 
 void CTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {
 	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
-	if (koopa != NULL)
+	if (koopa)
 	{
 		koopa->SetState(KOOPA_STATE_SHELL);
 		koopa->SetWings(false);
@@ -69,6 +73,6 @@ void CTail::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 void CTail::OnCollisionWithGoldenBrick(LPCOLLISIONEVENT e)
 {
 	CGoldenBrick* brick = dynamic_cast<CGoldenBrick*>(e->obj);
-	if (brick != NULL)
+	if (brick)
 		brick->OnCollisionWithTail(e);
 }

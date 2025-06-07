@@ -291,6 +291,7 @@ public:
 	void ReleaseCarriedKoopa();
 	void AddPoint(int point) { this->points += point; }
 	int GetPointCount() { return points; }
+	int GetCoinCount() { return coin; }
 
 	void HandleFlying(DWORD dt);
 	void HandleGliding(DWORD dt);

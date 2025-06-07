@@ -24,6 +24,7 @@
 #include "TeleportTunnel.h"
 #include "GUI.h"
 #include "SpawnTrigger.h"
+#include "EndLevelZone.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -437,6 +438,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_END_LEVEL_ZONE:
+	{
+		// Input format: object_type x y
+		if (tokens.size() < 5) return;
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		obj = new CEndLevelZone(x, y, width, height);
+		break;
+	}
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -565,6 +576,7 @@ void CPlayScene::Update(DWORD dt)
 	// Fixed X camera (center screen)
 	float camX = px - game->GetBackBufferWidth() / 2;
 	if (camX < 0) camX = 0;
+	if (camX > 2552) camX = 2520;
 
 	// Determine if Mario is in a hidden room (e.g., Y > 448)
 	isInHiddenRoom = py > 440;

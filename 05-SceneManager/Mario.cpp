@@ -546,6 +546,7 @@ void CMario::SetState(int state)
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
 
+
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
@@ -768,42 +769,52 @@ void CMario::ResetTailAttackAnimation()
 
 void CMario::HandleTailAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (isAttacking)
+	if (!isAttacking) return;
+
+	currentTailAttackTime += dt;
+
+	if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5)
 	{
-		currentTailAttackTime += dt;
-
-		if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5)
-		{
-			isAttacking = false;
-			currentTailAttackTime = 0;
-			tail->SetActive(false);
-			return;
-		}
-
-		float tailX, tailY;
-
-		if (currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME ||
-			(currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 4 &&
-				currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 5))
-		{
-			tailX = (nx > 0) ? x + MARIO_BIG_BBOX_WIDTH / 2 : x - TAIL_BBOX_WIDTH;
-		}
-		else if (currentTailAttackTime >= MARIO_TAIL_ATTACK_TIME_PER_FRAME * 2 &&
-			currentTailAttackTime < MARIO_TAIL_ATTACK_TIME_PER_FRAME * 3)
-		{
-			tailX = (nx > 0) ? x - MARIO_BIG_BBOX_WIDTH / 2 : x + TAIL_BBOX_WIDTH;
-		}
-		else
-		{
-			tailX = x;
-		}
-
-		tailY = y + MARIO_BIG_BBOX_HEIGHT / 4;
-
-		tail->SetPosition(tailX, tailY);
-		tail->SetActive(true);
-		tail->Update(dt, coObjects);
+		isAttacking = false;
+		currentTailAttackTime = 0;
+		tail->SetActive(false);
+		return;
 	}
+
+	float tailX, tailY;
+	int frame = currentTailAttackTime / MARIO_TAIL_ATTACK_TIME_PER_FRAME;
+	float tailOffsetX = 0;
+
+	switch (frame)
+	{
+	case 0:
+		tailOffsetX = (nx > 0) ? +12 : -20;
+		break;
+	case 1:
+		tailOffsetX = (nx > 0) ? +6 : -14;
+		break;
+	case 2:
+		tailOffsetX = 0;
+		break;
+	case 3:
+		tailOffsetX = (nx > 0) ? -14 : +6;
+		break;
+	case 4:
+	default:
+		tailOffsetX = (nx > 0) ? -20 : +12;
+		break;
+	}
+
+	tailX = x + tailOffsetX;
+	tailY = y + 10;
+
+	// Tail is only active during swing (frames 1-3)
+	bool swingPhase = (frame >= 1 && frame <= 3);
+	tail->SetPosition(tailX, tailY);
+	tail->SetActive(swingPhase);
+
+	if (swingPhase)
+		tail->Update(dt, coObjects);
 }
 
 void CMario::StartTeleport(float destX, float destY, bool goingDown)

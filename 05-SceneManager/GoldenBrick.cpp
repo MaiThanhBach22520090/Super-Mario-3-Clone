@@ -56,8 +56,9 @@ void CGoldenBrick::OnCollisionWithTail(LPCOLLISIONEVENT e)
 	//	scene->AddObject(button);
 	//}
 
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (isCoin) return; // Already transformed to coin
-	if (containsButton && !buttonRevealed && e->nx != 0)
+	if (containsButton && !buttonRevealed && e->nx != 0 && e->nx == 0 && mario->GetLevel() == MARIO_LEVEL_RACCOON)
 	{
 		buttonRevealed = true;
 		LPGAMEOBJECT button = new CButton(x, y - 16);

@@ -1,10 +1,9 @@
 #pragma once
+
 #include "GameObject.h"
 
-#define TAIL_BBOX_WIDTH		8
-#define TAIL_BBOX_HEIGHT	8
-
-#define TAIL_EXIST_TIME		4000 // milliseconds
+#define TAIL_BBOX_WIDTH  16
+#define TAIL_BBOX_HEIGHT 8
 
 class CTail : public CGameObject
 {
@@ -13,17 +12,18 @@ class CTail : public CGameObject
 public:
 	CTail(float x, float y);
 
-	void SetActive(bool active) { isActive = active; }
-
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void Render() override;
 	void GetBoundingBox(float& l, float& t, float& r, float& b) override;
-	int IsCollidable() const { return isActive ? 1 : 0; }
-	int IsBlocking() const { return 0; }
 
-	void OnNoCollision(DWORD dt);
-	void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e) override;
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoldenBrick(LPCOLLISIONEVENT e);
+
+	bool IsActive() { return isActive; }
+	void SetActive(bool active) { isActive = active; }
+	virtual int IsCollidable() override { return isActive ? 1 : 0; }
 };

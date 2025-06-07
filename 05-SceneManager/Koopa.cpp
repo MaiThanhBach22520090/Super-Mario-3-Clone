@@ -3,6 +3,9 @@
 #include "MysteryBox.h"
 #include "Ground.h"
 #include "BackPlatform.h"
+#include "Goomba.h"
+#include "PiranhaPlant.h"
+
 
 CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
 {
@@ -25,6 +28,10 @@ void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom
     bottom = top + (state == KOOPA_STATE_WALKING || state == KOOPA_STATE_PARATROOPA ? KOOPA_BBOX_HEIGHT : KOOPA_BBOX_HEIGHT_SHELL);
 }
 
+
+
+#pragma region Collisions
+
 void CKoopa::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
@@ -34,6 +41,19 @@ void CKoopa::OnNoCollision(DWORD dt)
 void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     OnCollisionWithMysteryBox(e);
+
+    if (dynamic_cast<CGoomba*>(e->obj))
+    {
+        OnCollisionWithGoomba(e);
+    }
+    else if (dynamic_cast<CKoopa*>(e->obj))
+    {
+        OnCollisionWithKoopa(e);
+    }
+    else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+    {
+        OnCollisionWithPiranhaPlant(e);
+    }
 
     if (!e->obj->IsBlocking()) return;
     if (dynamic_cast<CKoopa*>(e->obj)) return;
@@ -51,7 +71,6 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         vx = -vx;
     }
-
 }
 
 void CKoopa::OnCollisionWithMysteryBox(LPCOLLISIONEVENT e)
@@ -69,8 +88,7 @@ void CKoopa::OnStompedByMario(float marioX)
 {
     if (state == KOOPA_STATE_PARATROOPA)
     {
-        hasWings = false;
-        isParatroopa = false;
+
         SetState(KOOPA_STATE_WALKING);
     }
     else if (state == KOOPA_STATE_WALKING)
@@ -82,6 +100,46 @@ void CKoopa::OnStompedByMario(float marioX)
         SetState(marioX < x ? KOOPA_STATE_SHELL_MOVING_RIGHT : KOOPA_STATE_SHELL_MOVING_LEFT);
     }
 }
+
+void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+	if (goomba != nullptr && (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT))
+	{
+		if (goomba->GetState() != GOOMBA_STATE_DIE_ON_HIT)
+		{
+			goomba->SetState(GOOMBA_STATE_DIE_ON_HIT);
+		}
+	}
+}
+
+void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+    CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+    if (koopa != nullptr && (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT))
+    {
+        if (koopa->GetState() == KOOPA_STATE_PARATROOPA)
+        {
+            koopa->SetState(KOOPA_STATE_WALKING); // If hit a Paratroopa, it becomes a normal Koopa
+        }
+        else 
+        {       
+            koopa->SetState(KOOPA_STATE_DIE_ON_HIT);
+        }
+
+	}
+}
+
+void CKoopa::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
+{
+	CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+	if (piranhaPlant != nullptr)
+	{
+		
+	}
+}
+
+#pragma endregion
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -98,17 +156,20 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
+    if ((state == GOOMBA_STATE_DIE_ON_HIT) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+    {
+        isDeleted = true;
+        return;
+    }
+
     if ((state == KOOPA_STATE_SHELL || state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT) &&
         (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
     {
-        if (beingCarried)
+        if (beingCarried || (!beingCarried && vx == 0)) // Only recover if held
         {
-            beingCarried = false;
-            x += (nx >= 0 ? 6 : -6);
+            y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
+            SetState(KOOPA_STATE_WALKING);
         }
-
-        y -= (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_SHELL) / 2;
-        SetState(KOOPA_STATE_WALKING);
     }
 
 
@@ -137,7 +198,6 @@ void CKoopa::UpdateJump(DWORD dt)
     }
 }
 
-
 void CKoopa::Render()
 {
     if (state == KOOPA_STATE_WALKING || state == KOOPA_STATE_PARATROOPA)
@@ -146,6 +206,8 @@ void CKoopa::Render()
         aniId = ID_ANI_KOOPA_SHELL;
     else if (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT)
         aniId = ID_ANI_KOOPA_SHELL_MOVING;
+	else if (state == KOOPA_STATE_DIE_ON_HIT)
+		aniId = ID_ANI_KOOPA_SHELL;
 
     CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 
@@ -168,6 +230,7 @@ void CKoopa::SetState(int state)
     switch (state)
     {
     case KOOPA_STATE_WALKING:
+        hasWings = false;
         vx = -KOOPA_WALKING_SPEED;
         break;
 
@@ -187,6 +250,9 @@ void CKoopa::SetState(int state)
     case KOOPA_STATE_SHELL_MOVING_RIGHT:
         vx = KOOPA_SHELL_SPEED;
         break;
+	case KOOPA_STATE_DIE_ON_HIT:
+		vx = 0;
+		vy = 0.5f;
     }
 }
 

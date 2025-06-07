@@ -15,6 +15,7 @@
 #define KOOPA_STATE_SHELL_MOVING_LEFT  301
 #define KOOPA_STATE_SHELL_MOVING_RIGHT 302
 #define KOOPA_STATE_PARATROOPA 400
+#define KOOPA_STATE_DIE_ON_HIT 500
 
 #define PARATROOPA_JUMP_SPEED        0.25f
 #define PARATROOPA_GRAVITY           0.0005f
@@ -51,18 +52,26 @@ protected:
 
     void UpdateJump(DWORD dt);
 
-    virtual int IsCollidable() { return 1; };
+    virtual int IsCollidable()
+    {
+		if (state == KOOPA_STATE_DIE_ON_HIT)
+			return 0;
+        return 1;
+
+    };
     virtual int IsBlocking() { return 0; }
 
 public:
     CKoopa(float x, float y, bool isParatroopa = false);
 
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
+
     void OnNoCollision(DWORD dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;
-
 	void OnCollisionWithMysteryBox(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
     void OnStompedByMario(float marioX);
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = nullptr) override;

@@ -12,13 +12,15 @@
 #define PIRANHA_BBOX_WIDTH 12
 #define PIRANHA_BBOX_HEIGHT 24
 
-#define PIRANHA_IDLE_TIME 1000
+#define PIRANHA_IDLE_TIME 3000
 
 #define ID_ANI_PIRANHA 10031
 #define ID_ANI_PIRANHA_DL 10032
 #define ID_ANI_PIRANHA_UL 10033
 #define ID_ANI_PIRANHA_DR 10034
 #define ID_ANI_PIRANHA_UR 10035
+
+#define ID_ANI_PIRANHA_NORMAL 10037
 
 
 class CPiranhaPlant : public CGameObject
@@ -38,9 +40,13 @@ public:
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
     virtual void Render();
     virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-    int IsBlocking() { return 0; }
-    int IsCollidable()
+    int IsBlocking()  { return 0; }
+	int IsCollidable() 
     {
-		return isMovingUp ? 0 : 1;
+        return 0;
     }
+
+    void HandleIdleState();
+	void HandleMovement(DWORD dt);
+	void TryShootFireball();
 };

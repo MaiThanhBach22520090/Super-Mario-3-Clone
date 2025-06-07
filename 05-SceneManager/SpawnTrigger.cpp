@@ -6,7 +6,7 @@
 
 void CSpawnTrigger::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSpawnTrigger::RenderBoundingBox(void)

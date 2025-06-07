@@ -226,6 +226,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithEnemy();
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -239,7 +240,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_RACCOON;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -262,7 +263,8 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE && isTeleporting ? 0 : 1); 
+		if (isTeleporting) return 0;
+		return (state != MARIO_STATE_DIE) ; 
 	}
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0) && isTeleporting ? 0 : 1; ; }

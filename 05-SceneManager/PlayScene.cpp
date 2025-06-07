@@ -23,6 +23,7 @@
 #include "GoldenBrick.h"
 #include "TeleportTunnel.h"
 #include "GUI.h"
+#include "SpawnTrigger.h"
 
 
 #include "SampleKeyEventHandler.h"
@@ -419,6 +420,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			CGameObject* body_right_obj = new cSolidBlock(x + cellWidth, y + i * cellHeight, body_right, cellWidth, cellHeight);
 			objects.push_back(body_right_obj);
 		}
+	}
+
+	case OBJECT_TYPE_SPAWN_TRIGGER:
+	{
+		// Input format: object_type x y width height spawn_x spawn_y enemy_type spawn_with_wings
+		if (tokens.size() < 9) return;
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		int spawnX = atoi(tokens[5].c_str());
+		int spawnY = atoi(tokens[6].c_str());
+		int enemyType = atoi(tokens[7].c_str());
+		bool spawnWithWings = atoi(tokens[8].c_str()) == 1 ? true : false;
+		CSpawnTrigger* trigger = new CSpawnTrigger(x, y, width, height, spawnX, spawnY, enemyType, spawnWithWings);
+		obj = trigger;
+		break;
 	}
 
 	case OBJECT_TYPE_PORTAL:

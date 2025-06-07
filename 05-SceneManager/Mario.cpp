@@ -313,6 +313,30 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
+void CMario::OnCollisionWithEnemy()
+{
+	if (untouchable == 0)
+	{
+		if (level == MARIO_LEVEL_RACCOON)
+		{
+			// If Mario is raccoon, he can take a hit and keep flying
+			SetLevel(MARIO_LEVEL_BIG);
+			StartUntouchable();
+		}
+		else if (level == MARIO_LEVEL_BIG)
+		{
+			// If Mario is big, he shrinks to small
+			SetLevel(MARIO_LEVEL_SMALL);
+			StartUntouchable();
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
+
 
 #pragma endregion
 

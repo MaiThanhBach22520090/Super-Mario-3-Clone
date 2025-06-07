@@ -176,6 +176,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="SolidBlock.cpp" />
+    <ClCompile Include="SpawnTrigger.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Tail.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SolidBlock.h" />
+    <ClInclude Include="SpawnTrigger.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Tail.h" />

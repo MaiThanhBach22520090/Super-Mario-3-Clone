@@ -18,11 +18,37 @@ void CGUI::Render()
 	int coinCount = mario->GetCoinCount(); // Assuming GetCoinCount() returns the number of coins Mario has
 
     RenderNumber(coinCount, camX + 65, camY + 224, 7);
+
+    int seconds = timeLeft / 1000;
+    RenderNumber(seconds, camX + 137, camY + 224, 3); // e.g., render 3-digit countdown
+
 }
 
 void CGUI::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    // HUD doesn't move or update physics, but you can update displayed values here if needed
+    DWORD now = GetTickCount64();
+    DWORD delta = now - lastUpdateTime;
+
+    if (timeLeft > 0)
+    {
+        timeLeft = (timeLeft > delta) ? timeLeft - delta : 0;
+    }
+
+    lastUpdateTime = now;
+
+	if (timeLeft == 0)
+	{
+        CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		if (mario != nullptr)
+		{
+			mario->SetState(MARIO_STATE_DIE); // Set Mario to die state when time runs out
+			DebugOut(L"[INFO] Time's up! Mario has died.\n");
+		}
+        else
+        {
+            DebugOut(L"[ERROR] Mario object not found!\n");
+        }
+	}
 }
 
 void CGUI::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -58,4 +84,10 @@ void CGUI::RenderNumber(int number, float x, float y, int maxDigits)
 		
     }
 
+}
+
+void CGUI::StartTimer(DWORD totalMilliseconds)
+{
+    timeLeft = totalMilliseconds;
+    lastUpdateTime = GetTickCount64();
 }

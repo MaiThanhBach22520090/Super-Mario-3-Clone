@@ -445,7 +445,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int width = atoi(tokens[3].c_str());
 		int height = atoi(tokens[4].c_str());
 		obj = new CEndLevelZone(x, y, width, height);
-		break;
+
+		objects.insert(objects.begin(), obj);
+		return;
 	}
 
 	case OBJECT_TYPE_PORTAL:
@@ -576,7 +578,7 @@ void CPlayScene::Update(DWORD dt)
 	// Fixed X camera (center screen)
 	float camX = px - game->GetBackBufferWidth() / 2;
 	if (camX < 0) camX = 0;
-	if (camX > 2552) camX = 2520;
+	if (camX > 2562) camX = 2562;
 
 	// Determine if Mario is in a hidden room (e.g., Y > 448)
 	isInHiddenRoom = py > 440;

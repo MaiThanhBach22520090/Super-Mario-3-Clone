@@ -35,8 +35,6 @@ public:
         int rows = 50;
         int cols = 50;
 
-		DebugOut(L"[INFO] Rendering End Level Zone at (%f, %f) with size (%d, %d)\n", x, y, 50, 50);
-
         // Render left edge
         for (int row = 0; row < rows; row++)
         {

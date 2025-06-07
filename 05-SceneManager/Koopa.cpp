@@ -5,6 +5,9 @@
 #include "BackPlatform.h"
 #include "Goomba.h"
 #include "PiranhaPlant.h"
+#include "Mario.h"
+#include "PlayScene.h"
+
 
 
 CKoopa::CKoopa(float x, float y, bool hasWings) : CGameObject(x, y)
@@ -109,6 +112,9 @@ void CKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		if (goomba->GetState() != GOOMBA_STATE_DIE_ON_HIT)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE_ON_HIT);
+            CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+            mario->AddPoint(100); // Add points for hitting Goomba with shell
+
 		}
 	}
 }
@@ -118,15 +124,18 @@ void CKoopa::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
     CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
     if (koopa != nullptr && (state == KOOPA_STATE_SHELL_MOVING_LEFT || state == KOOPA_STATE_SHELL_MOVING_RIGHT))
     {
+        CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
         if (koopa->GetState() == KOOPA_STATE_PARATROOPA)
         {
-            koopa->SetState(KOOPA_STATE_WALKING); // If hit a Paratroopa, it becomes a normal Koopa
+            mario->AddPoint(100);
+            koopa->SetState(KOOPA_STATE_WALKING);
         }
         else 
-        {       
+        {    
             koopa->SetState(KOOPA_STATE_DIE_ON_HIT);
+			mario->AddPoint(100);
         }
-
 	}
 }
 
@@ -135,7 +144,9 @@ void CKoopa::OnCollisionWithPiranhaPlant(LPCOLLISIONEVENT e)
 	CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
 	if (piranhaPlant != nullptr)
 	{
-		
+        CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+        mario->AddPoint(100); // Add points for hitting Goomba with shell
+		piranhaPlant->Delete();
 	}
 }
 

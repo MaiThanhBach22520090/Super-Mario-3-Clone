@@ -132,6 +132,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			// Add points for killing Goomba
+			AddPoint(100);
 		}
 	}
 	else // hit by Goomba
@@ -144,6 +146,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+	AddPoint(50);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -155,13 +158,10 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		if (level == MARIO_LEVEL_SMALL)
 		{
 			level = MARIO_LEVEL_BIG;
-
+			AddPoint(1000);
 			// Move up a bit to avoid being stuck in the ground
 			y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		}
-
-		else if (level == MARIO_LEVEL_BIG)
-			coin += 100;
 	}
 }
 
@@ -206,6 +206,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			koopa->SetState(KOOPA_STATE_WALKING);
 			koopa->SetWings(false);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			AddPoint(100);
 		}
 		else
 
@@ -216,6 +217,7 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 			{
 				koopa->SetState(KOOPA_STATE_SHELL);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				AddPoint(100);
 			}
 			else if (koopaState == KOOPA_STATE_SHELL)
 			{
@@ -266,6 +268,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 		{
 			SetLevel(MARIO_LEVEL_RACCOON);
 		}
+		AddPoint(1000);
 	}
 }
 

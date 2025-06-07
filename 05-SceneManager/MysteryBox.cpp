@@ -58,14 +58,10 @@ void CMysteryBox::SetState(int state)
 		if (spawnObjectId == 10020)
 		{
 			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-			if (mario->GetLevel() == MARIO_LEVEL_BIG)
+			if (mario->GetLevel() == MARIO_LEVEL_BIG || mario->GetLevel() == MARIO_LEVEL_RACCOON)
 			{
 				CLeaf* leaf = new CLeaf(this->x, this->y - MYSTERY_BOX_BBOX_HEIGHT);
 				scene->AddObject(leaf);
-			}
-			else if (mario->GetLevel() == MARIO_LEVEL_RACCOON)
-			{
-				mario->AddPoint(1000);
 			}
 			else
 			{

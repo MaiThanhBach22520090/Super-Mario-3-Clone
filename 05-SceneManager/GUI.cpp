@@ -15,7 +15,7 @@ void CGUI::Render()
 
 	// Get Mario's Coin count or other values to display
     CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	int coinCount = mario->GetCoinCount(); // Assuming GetCoinCount() returns the number of coins Mario has
+	int coinCount = mario->GetPointCount(); // Assuming GetCoinCount() returns the number of coins Mario has
 
     RenderNumber(coinCount, camX + 65, camY + 224, 7);
 

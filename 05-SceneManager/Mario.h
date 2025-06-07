@@ -198,6 +198,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	int points;
 
 	// Raccoon
 	bool isFlying = false;
@@ -288,8 +289,8 @@ public:
 	int GetLevel() { return level; }
 
 	void ReleaseCarriedKoopa();
-	void AddPoint(int coin) { this->coin += coin; }
-	int GetCoinCount() { return coin; }
+	void AddPoint(int point) { this->points += point; }
+	int GetPointCount() { return points; }
 
 	void HandleFlying(DWORD dt);
 	void HandleGliding(DWORD dt);
